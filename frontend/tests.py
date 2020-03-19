@@ -10,15 +10,18 @@ class FrontendTests(TestCase):
         self.assertIsNotNone(response.client.cookies.items())
         session_id_from_cookie = response.client.cookies["sessionID"].value
         self.assertIsNotNone(session_id_from_cookie)
+        self.assertTemplateUsed("frontend/index.html")
 
     def test_cookie_dont_change_when_opening_page_again(self):
         c = Client()
         response_first = c.get(reverse("frontend:index"))
         session_id_from_first_cookie = response_first.client.cookies["sessionID"].value
+        self.assertTemplateUsed("frontend/index.html")
         response_second = c.get(reverse("frontend:index"))
         session_id_from_second_cookie = response_second.client.cookies[
             "sessionID"
         ].value
+        self.assertTemplateUsed("frontend/index.html")
         self.assertEqual(session_id_from_first_cookie, session_id_from_second_cookie)
 
     def test_cookie_is_the_same_in_backend(self):
@@ -27,6 +30,7 @@ class FrontendTests(TestCase):
         session_id_from_first_frontend = response_first.client.cookies[
             "sessionID"
         ].value
+        self.assertTemplateUsed("frontend/index.html")
         response = c.post(reverse("backend:get_cookie"))
         data = json.loads(response.content)
         cookie_from_backend = response.client.cookies["sessionID"].value
