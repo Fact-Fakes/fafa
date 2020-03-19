@@ -1,3 +1,7 @@
+[![Pipeline](https://gitlab.com/daniel.rozycki/fakebuster/badges/master/pipeline.svg)](https://gitlab.com/daniel.rozycki/fakebuster) 
+[![Coverage](https://gitlab.com/daniel.rozycki/fakebuster/badges/master/coverage.svg)](https://gitlab.com/daniel.rozycki/fakebuster)
+
+
 # FakeBuster
 
 This is repository for awesome project named FakeBuster
