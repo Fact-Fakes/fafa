@@ -17,7 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 
-urlpatterns = []
+urlpatterns = [
+    path("", include("frontend.urls")),
+    path("api/", include("backend.urls")),
+]
 
 if settings.DEBUG:
     urlpatterns.append(path("admin/", admin.site.urls))
