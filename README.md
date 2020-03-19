@@ -19,5 +19,6 @@ This is repository for awesome project named FakeBuster
  1. Install packages from Pipfile `pipenv install`
  2. Open virtual environment `pipenv shell`
  3. Create migrations `python manage.py migrate`
- 3. Start Django server `python manage.py runserver`
+ 4. Start Django server `python manage.py runserver`
+ 5. Go to `localhost:8000` to see main page
  > To add package run e.g. `pipenv install package_name`
