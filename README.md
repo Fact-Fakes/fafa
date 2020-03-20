@@ -24,3 +24,24 @@ This is repository for awesome project named FakeBuster
  6. Start Django server `python manage.py runserver`
  7. Go to `localhost:8000` to see main page
  > To add package run e.g. `pipenv install package_name`
+
+# Endpoints
+
+### Getting questions
+*  ***URL***
+`/questions/?format=json`
+
+*  ***URL PARAMS***
+`sessionID=string max 255` -> By adding this param We can get user answers (Use as required)
+
+`search=string` -> This will search in title and keywords of questions
+
+Above params can be chained e.g. `/questions/?format=json&sessionID=sampleid&search=samplesearch`
+
+### Getting one question
+
+*  ***URL***
+`/questions/<QUESTION_ID:INTEGER>/`
+
+* ***URL PARAMS**
+Same as above

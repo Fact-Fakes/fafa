@@ -5,12 +5,12 @@ verify_ssl = true
 
 [dev-packages]
 black = "*"
-openpyxl = "*"
 
 [packages]
 django = "*"
 djangorestframework = "*"
 mock = "*"
+openpyxl = "*"
 
 [requires]
 python_version = "3.8"

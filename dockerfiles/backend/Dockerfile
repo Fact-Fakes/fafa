@@ -10,6 +10,7 @@ ADD core /api/core
 ADD manage.py /api/
 ADD Pipfile /api/
 ADD dockerfiles/backend/entrypoint.sh /api/
+ADD questions.xlsx /api/
 
 RUN chmod +x entrypoint.sh
 
