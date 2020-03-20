@@ -5,6 +5,7 @@ from django.db.utils import IntegrityError
 
 class Keyword(models.Model):
     """Keywords to identify a question topic"""
+
     name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
@@ -13,6 +14,7 @@ class Keyword(models.Model):
 
 class Question(models.Model):
     """Single question with basic attributes"""
+
     title = models.CharField(max_length=255, unique=True)
     is_true = models.BooleanField(default=None)
     real_answer = models.TextField()
@@ -20,7 +22,7 @@ class Question(models.Model):
     no_answers = models.IntegerField(default=0)
     up_votes = models.IntegerField(default=0)
     down_votes = models.IntegerField(default=0)
-    keywords = models.ManyToManyField(Keyword, related_name='questions', blank=True)
+    keywords = models.ManyToManyField(Keyword, related_name="questions", blank=True)
 
     def __str__(self):
         return self.title
@@ -28,12 +30,13 @@ class Question(models.Model):
 
 class Answer(models.Model):
     """User's single quiz answer"""
+
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     sessionID = models.CharField(max_length=255)
     users_answer = models.BooleanField(default=None)
 
     class Meta:
-        unique_together = ['sessionID', 'question']
+        unique_together = ["sessionID", "question"]
 
     def save(self, *args, **kwargs):
         """A new answer updates counter in question model"""
@@ -46,17 +49,18 @@ class Answer(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.question}: {self.users_answer}'
+        return f"{self.question}: {self.users_answer}"
 
 
 class Vote(models.Model):
     """User's single vote for a question"""
+
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     sessionID = models.CharField(max_length=255)
     updown = models.BooleanField(default=None)
 
     class Meta:
-        unique_together = ['sessionID', 'question']
+        unique_together = ["sessionID", "question"]
 
     def save(self, *args, **kwargs):
         """A new vote updates counter in question model"""
@@ -69,11 +73,12 @@ class Vote(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.question}: {self.updown}'
+        return f"{self.question}: {self.updown}"
 
 
 class Attachment(models.Model):
     """Attachments for questions"""
+
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    file = models.FileField(upload_to='media/')
+    file = models.FileField(upload_to="media/")
