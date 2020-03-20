@@ -33,10 +33,13 @@ class Command(BaseCommand):  # pragma: no cover
         )
 
     def generate_data(self, excel_obj: object):
-        for row in excel_obj.iter_rows(min_row=2, min_col=2):
+        for row in excel_obj.iter_rows(min_row=2, min_col=3):
             temp_data = {}
             for i, cell in enumerate(row):
-                temp_data.setdefault(self.row_items[i], cell.value)
+                try:
+                    temp_data.setdefault(self.row_items[i], cell.value)
+                except IndexError:
+                    continue
             yield temp_data
 
     def generate_question_objects(self, data: list) -> Question:
