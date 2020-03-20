@@ -12,8 +12,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "backend",
-    "frontend",
+    "rest_framework",
+    "backend"
 ]
 
 MIDDLEWARE = [
@@ -79,3 +79,8 @@ STATIC_URL = "/static/"
 STATIC_ROOT = "/static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOW = "/media/"
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
