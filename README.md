@@ -28,10 +28,13 @@ This is repository for awesome project named FakeBuster
 # Endpoints
 
 ### Getting questions
+
 *  ***URL***
+
 `/questions/?format=json`
 
 *  ***URL PARAMS***
+
 `sessionID=string max 255` -> By adding this param We can get user answers (Use as required)
 
 `search=string` -> This will search in title and keywords of questions
@@ -41,7 +44,9 @@ Above params can be chained e.g. `/questions/?format=json&sessionID=sampleid&sea
 ### Getting one question
 
 *  ***URL***
-`/questions/<QUESTION_ID:INTEGER>/`
+
+`/questions/<QUESTION_ID:INTEGER>/?format=json`
 
 * ***URL PARAMS**
+
 Same as above
