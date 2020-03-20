@@ -5,6 +5,7 @@ from django.db import transaction
 from django.test import TestCase, Client
 from django.core.files import File
 from django.shortcuts import reverse
+from rest_framework.test import APIClient, APITestCase
 
 import mock
 
@@ -153,3 +154,258 @@ class ModelTests(TestCase):
         )
         self.assertTrue(isinstance(file_model, Attachment))
         self.assertEqual(file_model.name, file_mock.name)
+
+
+class ApiTests(APITestCase):
+    def setUp(self):
+        Question.objects.create(
+            title="Test title",
+            real_answer="Real answer",
+            is_true=False,
+            yes_answers=0,
+            no_answers=0,
+            up_votes=0,
+            down_votes=0,
+        )
+        Question.objects.create(
+            title="Test title2",
+            real_answer="Real answer2",
+            is_true=True,
+            yes_answers=0,
+            no_answers=0,
+            up_votes=0,
+            down_votes=0,
+        )
+        Keyword.objects.create(name="test keyword")
+
+    def test_can_get_all_questions(self):
+        expected = {
+            "count": 2,
+            "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "pk": 1,
+                    "title": "Test title",
+                    "is_true": False,
+                    "real_answer": "Real answer",
+                    "yes_answers": 0,
+                    "no_answers": 0,
+                    "up_votes": 0,
+                    "down_votes": 0,
+                    "keywords": [],
+                    "answers": None,
+                    "votes": [],
+                    "attachments": [],
+                },
+                {
+                    "pk": 2,
+                    "title": "Test title2",
+                    "is_true": True,
+                    "real_answer": "Real answer2",
+                    "yes_answers": 0,
+                    "no_answers": 0,
+                    "up_votes": 0,
+                    "down_votes": 0,
+                    "keywords": [],
+                    "answers": None,
+                    "votes": [],
+                    "attachments": [],
+                },
+            ],
+        }
+        factory = APIClient()
+        response = factory.get("/questions/?format=json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), json.loads(json.dumps(expected)))
+
+    def test_answer_is_set_when_using_session_id(self):
+        expected = {
+            "count": 2,
+            "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "pk": 1,
+                    "title": "Test title",
+                    "is_true": False,
+                    "real_answer": "Real answer",
+                    "yes_answers": 1,
+                    "no_answers": 0,
+                    "up_votes": 0,
+                    "down_votes": 0,
+                    "keywords": [],
+                    "answers": True,
+                    "votes": [],
+                    "attachments": [],
+                },
+                {
+                    "pk": 2,
+                    "title": "Test title2",
+                    "is_true": True,
+                    "real_answer": "Real answer2",
+                    "yes_answers": 0,
+                    "no_answers": 0,
+                    "up_votes": 0,
+                    "down_votes": 0,
+                    "keywords": [],
+                    "answers": None,
+                    "votes": [],
+                    "attachments": [],
+                },
+            ],
+        }
+        Answer.objects.create(
+            question=Question.objects.get(pk=1), sessionID="session", users_answer=True
+        )
+        factory = APIClient()
+        response = factory.get("/questions/?format=json&sessionID=session")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), json.loads(json.dumps(expected)))
+
+    def test_search_works_by_title(self):
+        expected = {
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "pk": 2,
+                    "title": "Test title2",
+                    "is_true": True,
+                    "real_answer": "Real answer2",
+                    "yes_answers": 0,
+                    "no_answers": 0,
+                    "up_votes": 0,
+                    "down_votes": 0,
+                    "keywords": [],
+                    "answers": None,
+                    "votes": [],
+                    "attachments": [],
+                },
+            ],
+        }
+        factory = APIClient()
+        response = factory.get("/questions/?format=json&search=title2")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), json.loads(json.dumps(expected)))
+
+    def test_search_works_by_keyword(self):
+        expected = {
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "pk": 2,
+                    "title": "Test title2",
+                    "is_true": True,
+                    "real_answer": "Real answer2",
+                    "yes_answers": 0,
+                    "no_answers": 0,
+                    "up_votes": 0,
+                    "down_votes": 0,
+                    "keywords": ["testkeyword"],
+                    "answers": None,
+                    "votes": [],
+                    "attachments": [],
+                },
+            ],
+        }
+        keyword = Keyword.objects.create(name="testkeyword")
+        q = Question.objects.get(pk=2)
+        q.keywords.add(keyword)
+        factory = APIClient()
+        response = factory.get("/questions/?format=json&search=testkeyword")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), json.loads(json.dumps(expected)))
+
+    def test_search_works_by_keyword_and_title(self):
+        expected = {
+            "count": 2,
+            "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "pk": 1,
+                    "title": "Test title",
+                    "is_true": False,
+                    "real_answer": "Real answer",
+                    "yes_answers": 0,
+                    "no_answers": 0,
+                    "up_votes": 0,
+                    "down_votes": 0,
+                    "keywords": [],
+                    "answers": None,
+                    "votes": [],
+                    "attachments": [],
+                },
+                {
+                    "pk": 2,
+                    "title": "Test title2",
+                    "is_true": True,
+                    "real_answer": "Real answer2",
+                    "yes_answers": 0,
+                    "no_answers": 0,
+                    "up_votes": 0,
+                    "down_votes": 0,
+                    "keywords": ["answer2"],
+                    "answers": None,
+                    "votes": [],
+                    "attachments": [],
+                },
+            ],
+        }
+        keyword = Keyword.objects.create(name="answer2")
+        q = Question.objects.get(pk=2)
+        q.keywords.add(keyword)
+        factory = APIClient()
+        response = factory.get("/questions/?format=json&search=test")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), json.loads(json.dumps(expected)))
+
+    def test_question_list_contains_attachments(self):
+        expected = {
+            "count": 2,
+            "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "pk": 1,
+                    "title": "Test title",
+                    "is_true": False,
+                    "real_answer": "Real answer",
+                    "yes_answers": 0,
+                    "no_answers": 0,
+                    "up_votes": 0,
+                    "down_votes": 0,
+                    "keywords": [],
+                    "answers": None,
+                    "votes": [],
+                    "attachments": [{"pk": 1, "name": "testfile", "file": ""}],
+                },
+                {
+                    "pk": 2,
+                    "title": "Test title2",
+                    "is_true": True,
+                    "real_answer": "Real answer2",
+                    "yes_answers": 0,
+                    "no_answers": 0,
+                    "up_votes": 0,
+                    "down_votes": 0,
+                    "keywords": [],
+                    "answers": None,
+                    "votes": [],
+                    "attachments": [],
+                },
+            ],
+        }
+        file_mock = mock.MagicMock(spec=File)
+        file_mock.name = "test.jpg"
+        q = Question.objects.get(pk=1)
+        att = Attachment.objects.create(question=q, name="testfile", file=file_mock)
+        factory = APIClient()
+        expected["results"][0]["attachments"][0]["file"] = f"/media/{att.file.name}"
+        response = factory.get("/questions/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), json.loads(json.dumps(expected)))
