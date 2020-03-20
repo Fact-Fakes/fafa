@@ -44,7 +44,11 @@ class Command(BaseCommand):  # pragma: no cover
 
     def generate_question_objects(self, data: list) -> Question:
         for item in data:
-            if item.get("question") and item.get("is_true") and item.get("real_answer"):
+            if (
+                item.get("question")
+                and item.get("is_true") in [0, 1]
+                and item.get("real_answer")
+            ):
                 answer = item["real_answer"]
                 for i in range(3):
                     source = f"sources{i+1 if i != 0 else ''}"
