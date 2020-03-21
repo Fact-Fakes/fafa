@@ -31,9 +31,9 @@ export const Routes: React.FC = () => {
           <Route exact={true} path="/" component={App} />
           <Route
             exact={true}
-            path="/link1"
+            path="/about"
             component={() => {
-              return <div>First link</div>;
+              return <div>About</div>;
             }}
           />
           <Route
@@ -41,8 +41,22 @@ export const Routes: React.FC = () => {
             path="/questions/:page"
             component={() => <QuestionsPage />}
           />
-          <Route exact={true} path="/not-existing" component={() => <div>404 !</div>} />
-          <Redirect to={"/"} />
+          <Route
+            component={() => {
+              return (
+                <div className="text-center">
+                  <h2 className="text-white">404!</h2>
+                  <h3 className="text-muted">
+                    Something went wrong and we're working on it!
+                    <img
+                      className="img-fluid"
+                      src={process.env.PUBLIC_URL + "/icons/wrench_icon.png"}
+                    ></img>
+                  </h3>
+                </div>
+              );
+            }}
+          />
         </Switch>
       </div>
     </BrowserRouter>

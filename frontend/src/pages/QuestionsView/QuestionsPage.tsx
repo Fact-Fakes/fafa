@@ -40,15 +40,17 @@ const QuestionsPage: React.FC = () => {
     getQuestionsAsyncWrapper();
   }, []);
 
-  console.log(questions);
-
   return (
-    <div>
+    <div className="col-12 col-md-6 mx-auto">
       {questions.map((question, index) => {
         return (
           <>
             {question.answers && (
-              <Answer correctAnswer={question.is_true} userAnswer={question.answers} />
+              <Answer
+                key={index}
+                correctAnswer={question.is_true}
+                userAnswer={question.answers}
+              />
             )}
             <Question className="my-5" key={index} question={question} />
           </>

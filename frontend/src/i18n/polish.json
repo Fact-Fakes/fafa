@@ -7,6 +7,10 @@
     "add": "dodaj",
     "ourExpert": "nasz ekspert",
     "answers": "odpowiada",
-    "sessionId": "ID sesji"
+    "sessionId": "ID sesji",
+    "subheader": "Weryfikujemy newsy o koronawirusie",
+    "subheader.muted": "Sprawdzaj swoją wiedzę i bądź na bieżąco",
+    "truth": "PRAWDA",
+    "fake": "FAŁSZ"
   }
 }

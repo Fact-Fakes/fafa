@@ -7,7 +7,20 @@ const Header = () => {
 
   const { t } = useTranslation();
   return (
-    <nav className="navbar navbar-expand-md navbar-light bg-light sticky-top navbar justify-content-between">
+    <nav className="navbar navbar-expand-md navbar-dark sticky-top bg-black2 justify-content-between">
+      <a className="navbar-brand " href="#">
+        {/* <img
+          src="./public/profile.png"
+          width="30"
+          height="30"
+          className="d-inline-block align-top"
+          alt=""
+        /> */}
+        <div className="d-inline-flex mb-0 flex-column">
+          <h2 className="d-inline-flex mb-0">FAFA</h2>
+          <span className="d-inline-flex mb-0">facts & fakes</span>
+        </div>
+      </a>
       <button
         className="navbar-toggler"
         type="button"
@@ -24,16 +37,6 @@ const Header = () => {
       >
         <span className="navbar-toggler-icon"></span>
       </button>
-      <a className="navbar-brand" href="#">
-        <img
-          src="./public/profile.png"
-          width="30"
-          height="30"
-          className="d-inline-block align-top"
-          alt=""
-        />
-        <h2 className="d-inline-flex mb-0">FakeBuster</h2>
-      </a>
 
       <ul
         className={`navbar-nav ml-auto d-md-flex ${
@@ -50,8 +53,8 @@ const Header = () => {
         >
           {t("browse")} <span className="sr-only">{t("active")}</span>
         </NavLink>
-        <NavLink className="nav-link capitalized" to="/link1" activeClassName="active">
-          {t("rules")}
+        <NavLink className="nav-link capitalized" to="/about" activeClassName="active">
+          {t("about")}
         </NavLink>
         <NavLink
           className="nav-link capitalized"
