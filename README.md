@@ -31,7 +31,7 @@ This is repository for awesome project named FakeBuster
 
 *  ***URL***
 
-`/questions/?format=json`
+GET `/questions/?format=json`
 
 *  ***URL PARAMS***
 
@@ -45,8 +45,42 @@ Above params can be chained e.g. `/questions/?format=json&sessionID=sampleid&sea
 
 *  ***URL***
 
-`/questions/<QUESTION_ID:INTEGER>/?format=json`
+GET `/questions/<QUESTION_ID:INTEGER>/?format=json`
 
 * ***URL PARAMS**
 
 Same as above
+
+### Adding answer
+
+*  ***URL***
+
+POST `/answer/add/`
+
+*  ***POST PARAMS***
+
+`question=int` -> Question PK
+
+`sessionID=string max 255` -> Required parameter so user is saved to question
+
+`users_answer=bool` -> If True user clicked YES, otherwise user clicked NO
+
+Response status code : 201
+Response content : same as post params
+
+### Adding vote
+
+*  ***URL***
+
+POST `/vote/add/`
+
+*  ***POST PARAMS***
+
+`question=int` -> Question PK
+
+`sessionID=string max 255` -> Required parameter so user is saved to question
+
+`updown=bool` -> If True user clicked UP ARROW, otherwise user clicked DOWN ARROW
+
+Response status code : 201
+Response content : same as post params

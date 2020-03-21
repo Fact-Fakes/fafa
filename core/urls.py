@@ -23,6 +23,8 @@ from backend import views
 
 router = routers.DefaultRouter()
 router.register(r"questions", views.QuestionsViewsSet)
+router.register(r"answer/add", views.AddAnswerViewSet)
+router.register(r"vote/add", views.AddVoteViewSet)
 
 urlpatterns = (
     [
