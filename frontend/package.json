@@ -6,21 +6,25 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "@types/bootstrap": "^4.3.1",
-    "@types/jest": "^24.9.1",
-    "@types/js-cookie": "^2.2.5",
-    "@types/node": "^12.0.0",
-    "@types/react-dom": "^16.9.0",
-    "@types/react-router": "^5.1.4",
-    "@types/react-router-dom": "^5.1.3",
+    "@types/i18next": "^13.0.0",
+    "@types/i18next-browser-languagedetector": "^3.0.0",
+    "@types/i18next-xhr-backend": "^1.4.2",
+    "@types/react-i18next": "^8.1.0",
+    "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
+    "i18next": "^19.3.3",
+    "i18next-browser-languagedetector": "^4.0.2",
+    "i18next-xhr-backend": "^3.2.2",
     "js-cookie": "^2.2.1",
+    "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-i18next": "^11.3.4",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "uuid": "^7.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -44,6 +48,18 @@
     ]
   },
   "devDependencies": {
-    "@types/react": "^16.9.23"
+    "@types/bootstrap": "^4.3.1",
+    "@types/jest": "^24.9.1",
+    "@types/js-cookie": "^2.2.5",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.23",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-router": "^5.1.4",
+    "@types/react-router-dom": "^5.1.3",
+    "@types/uuid": "^7.0.2",
+    "webpack-env": "^0.8.0"
+  },
+  "resolutions": {
+    "@babel/preset-env": "^7.8.7"
   }
 }

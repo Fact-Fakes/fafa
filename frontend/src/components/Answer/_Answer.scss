@@ -1,0 +1,11 @@
+$error: #ea331a;
+$success: #7cc245;
+
+.correct {
+  color: $error;
+  background-color: rgba($error, 80);
+}
+.incorrect {
+  color: $success;
+  background-color: rgba($success, 80);
+}

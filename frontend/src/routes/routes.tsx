@@ -1,17 +1,17 @@
 import React from "react";
-import { Router } from "react-router";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
-import { useParams, useHistory } from "react-router";
+import { useParams } from "react-router";
 import Cookies from "js-cookie";
 
 // import PrivateRoute from "./PrivateRoute";
 import { Header } from "../components";
-import HomePageContainer from "../pages/App/App";
+import App from "../pages/App/App";
+import { QuestionsPage } from "../pages";
 
 export const BasicParamsComponent = () => {
   const { id = "" } = useParams();
 
-  Cookies.set("PostId", `This post id is: ${id}`, { expires: 1 });
+  Cookies.set("PostId", id, { expires: 1 });
 
   const cookieValue = Cookies.get("PostId");
 
@@ -26,9 +26,9 @@ export const Routes: React.FC = () => {
   return (
     <BrowserRouter>
       <Header />
-      <div className="container main-view">
+      <div className="container main-view my-4">
         <Switch>
-          <Route exact={true} path="/" component={HomePageContainer} />
+          <Route exact={true} path="/" component={App} />
           <Route
             exact={true}
             path="/link1"
@@ -37,10 +37,11 @@ export const Routes: React.FC = () => {
             }}
           />
           <Route
-            exact={true}
-            path="/link2/:id"
-            component={() => <BasicParamsComponent />}
+            exact={false}
+            path="/questions/:page"
+            component={() => <QuestionsPage />}
           />
+          <Route exact={true} path="/not-existing" component={() => <div>404 !</div>} />
           <Redirect to={"/"} />
         </Switch>
       </div>
