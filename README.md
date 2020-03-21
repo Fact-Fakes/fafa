@@ -25,6 +25,23 @@ This is repository for awesome project named FakeBuster
  7. Go to `localhost:8000` to see main page
  > To add package run e.g. `pipenv install package_name`
 
+## Running with docker
+
+If you want to run the latest version from the source first run.
+
+```bash
+make images
+```
+
+If not just run commands bellow, they start the application based on the latest [published](https://hub.docker.com/u/fakebuster) docker images:
+
+```bash
+docker-compose pull
+docker-compose up
+```
+
+Now visit: `http://0.0.0.0:3000/`.
+
 # Endpoints
 
 ### Getting questions

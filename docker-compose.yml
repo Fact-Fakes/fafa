@@ -1,0 +1,46 @@
+version: "3.2"
+
+services:
+
+  frontend-web:
+    image: fakebuster/fakebuster-backend
+    command: pipenv run gunicorn core.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - frontend-db
+    volumes:
+      - static:/api/static
+      - media:/api/media
+    environment:
+      - SECRET_KEY=verysecret
+      - DEBUG=1
+      - DATABASE_HOST=frontend-db
+      - DATABASE_USER=django_test
+      - DATABASE_PASS=django_test
+      - DATABASE_DB=django_test
+      - DATABASE_PORT=5432
+
+  frontend-db:
+    image: postgres:12.2-alpine
+    volumes:
+      - postgres_data:/var/lib/postrgesql/data/
+    environment:
+      - POSTGRES_USER=django_test
+      - POSTGRES_PASSWORD=django_test
+      - POSTGRES_DB=django_test
+
+  frontend:
+    image: fakebuster/fakebuster-frontend
+    command: yarn start
+    ports:
+      - "3000:3000"
+    depends_on:
+      - frontend-web
+    environment:
+      - REACT_APP_API_BASE=http://127.0.0.1:8000/
+
+volumes:
+  postgres_data:
+  static:
+  media:
