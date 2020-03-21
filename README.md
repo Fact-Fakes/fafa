@@ -27,16 +27,21 @@ This is repository for awesome project named FakeBuster
 
 ## Running with docker
 
-If you want to run the latest version from the source first run.
+If you want to run the latest [published](https://hub.docker.com/u/fakebuster) version run:
+
+```bash
+docker-compose pull
+```
+
+If you want to run the latest version from the source first run:
 
 ```bash
 make images
 ```
 
-If not just run commands bellow, they start the application based on the latest [published](https://hub.docker.com/u/fakebuster) docker images:
+Finally to start the application run:
 
 ```bash
-docker-compose pull
 docker-compose up
 ```
 
