@@ -33,3 +33,5 @@ DATABASES = {
         "PORT": os.environ.get("DATABASE_PORT"),
     }
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
