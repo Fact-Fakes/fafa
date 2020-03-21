@@ -38,3 +38,23 @@
     }
   }
 }
+
+.quote-icon {
+  &::after {
+    content: "";
+    display: block;
+    background-image: url("/icons/quote.svg");
+    background-size: auto;
+    background-repeat: no-repeat;
+    opacity: 0.3;
+    width: auto;
+    position: relative;
+    height: 3em;
+    top: -5em;
+    left: -10px;
+  }
+}
+
+.author-card {
+  @extend .bg-primary, .rounded;
+}

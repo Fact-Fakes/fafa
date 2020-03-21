@@ -8,7 +8,7 @@ import POLISH from "./polish.json";
 
 const resources = {
   en: ENGLISH,
-  pl: POLISH,
+  pl: POLISH
 };
 
 i18n
@@ -17,13 +17,13 @@ i18n
   .use(initReactI18next || {}) // init i18next // this empty object is added for testing, don't know why but in 3 test's initReactI18next is undefined but it's not necessary in this spec test
   .init({
     resources,
-    fallbackLng: "en",
+    fallbackLng: "pl",
     lng: "pl",
     keySeparator: false,
     debug: false,
     interpolation: {
-      escapeValue: false, // not needed for react as it escapes by default
-    },
+      escapeValue: false // not needed for react as it escapes by default
+    }
   });
 
 export default i18n;

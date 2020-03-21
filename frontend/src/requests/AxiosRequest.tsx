@@ -45,6 +45,15 @@ async function getQuestions(url: string) {
   return response.data.results as QuestionProps[];
 }
 
-export { getQuestions };
+async function sendAnswers(url: string, data: any) {
+  const response: any = await request({
+    url,
+    method: "POST",
+    data
+  });
+  return response.data.results as QuestionProps[];
+}
+
+export { getQuestions, sendAnswers };
 
 export default request;

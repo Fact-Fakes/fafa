@@ -1,14 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { QuestionProps } from "../../requests/AxiosRequest";
-
-// oldinitial = questionId = 0
-// questionTitle = "Error: no title"
-// question = "Error: no question"
-// answer = "Error: no answer"
-// expertName = "Error: no expert specified"
-// expertDetailsURL = "Error: no expert details url"
-// tags = [{ title: "No tags", link: "no link" }]
+import { QuestionProps, sendAnswers } from "../../requests/AxiosRequest";
+import Cookies from "js-cookie";
 
 const QuizQuestion: React.FC<{ question: QuestionProps; className?: string }> = ({
   className = "",
@@ -28,6 +21,16 @@ const QuizQuestion: React.FC<{ question: QuestionProps; className?: string }> = 
   }
 }) => {
   const { t } = useTranslation();
+  const cookieSessionID = Cookies.get("sessionId");
+
+  const submitAnswer = async (data: {
+    question: number;
+    sessionID: string;
+    users_answer: boolean;
+  }) => {
+    const url = "/answer/add/";
+    sendAnswers(url, data);
+  };
 
   return (
     <div data-questionid={pk} className={"container border rounded " + className}>
@@ -45,52 +48,96 @@ const QuizQuestion: React.FC<{ question: QuestionProps; className?: string }> = 
             );
           })}
         </div>
-        <div className="col-12 my-1">
-          <a className="text-dark" href={`http://ourpage/links/${pk}`}>
-            <h3>{title}</h3>
+        <div className="col-12 mt-3 px-3">
+          <a
+            className="text-white quote-icon text-center"
+            href={`http://ourpage/links/${pk}`}
+          >
+            <h3 className="mx-4">{title}</h3>
           </a>
         </div>
-        <div className="container pictures pb-4">
+        <div className="container pictures pb-2">
           <div className="row">
-            <div className="col-8 vh-50 d-flex justify-content-end">
+            <div className="col-8 vh-50 d-flex mx-auto">
               <img
-                className="ml-auto img-fluid voting-hand-yes rounded"
+                className="img-fluid voting-hand-yes rounded mx-auto"
                 src="https://picsum.photos/200"
                 alt=""
               />
             </div>
-            {/* <div className="col-6 d-flex justify-content-start">
-              <img
-                className="mr-auto img-thumbnail voting-hand-no rounded"
-                src="https://picsum.photos/200"
-                alt=""
-              />
-            </div> */}
-            <div className="col-12 text-center text-muted">
+            <div className="col-12 text-center text-muted mt-1">
               {t("Źródło z dnia")}
               {": "}
               {"30.03.2020"}
             </div>
           </div>
         </div>
-        {/* <div className="col-12 mt-2">
-          <p className="capitalized">
-            {t("ourExpert")}
-            {", "}
-            <a
-              href={
-                expertDetailsURL.includes("https://")
-                  ? expertDetailsURL
-                  : "https://" + expertDetailsURL
-              }
+      </div>
+      <div className="container mb-2">
+        <div className="row d-flex justify-content-around">
+          <div className="col-6 d-flex justify-content-center">
+            <button
+              className="btn btn-dark p-2"
+              style={{ borderRadius: "3em", minWidth: "7em" }}
+              onClick={() => {
+                submitAnswer({
+                  question: pk,
+                  sessionID: cookieSessionID!,
+                  users_answer: true
+                });
+              }}
             >
-              {expertName}
-            </a>{" "}
-            {t("answers")}
-            {": "}
-          </p>
-        </div> */}{" "}
-        {/*For when we have experts in our excel*/}
+              <img
+                src={process.env.PUBLIC_URL + "/icons/prawda.svg"}
+                className="mr-2"
+                alt=""
+              />
+              {t("truth")}
+            </button>
+          </div>
+          <div className="col-6 d-flex justify-content-center">
+            <button
+              className="btn btn-dark p-2"
+              style={{ borderRadius: "3em", minWidth: "7em" }}
+              onClick={() => {
+                submitAnswer({
+                  question: pk,
+                  sessionID: cookieSessionID!,
+                  users_answer: false
+                });
+              }}
+            >
+              <img
+                src={process.env.PUBLIC_URL + "/icons/falsz.svg"}
+                className="mr-2"
+                alt=""
+              />
+              {t("fake")}
+            </button>
+          </div>
+        </div>
+        <div className="author-card container my-3 mx-auto">
+          <div className="row mb-1 mt-4">
+            <div className="col-5">
+              <img
+                className="img-thumbnail border-0"
+                src={process.env.PUBLIC_URL + "/authors/totylkoteoria.jpg"}
+              />
+            </div>
+            <div className="col-5 pl-0">
+              <div className="d-flex flex-column">
+                <span>Weryfikuje:</span>
+                <h4>Łukasz Sakowski</h4>
+                <a href={"/author/" + "id"} className="text-white">
+                  To tylko teoria
+                </a>
+              </div>
+            </div>
+            <div className="col-2">
+              <img src={process.env.PUBLIC_URL + "/icons/clock.svg"} />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

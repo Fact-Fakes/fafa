@@ -1,3 +1,7 @@
 .active {
   @extend .border-bottom, .border-top;
 }
+
+.bg-black2 {
+  background: $black2 !important;
+}
