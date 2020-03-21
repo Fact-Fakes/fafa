@@ -194,7 +194,7 @@ class ApiTests(APITestCase):
                     "down_votes": 0,
                     "keywords": [],
                     "answers": None,
-                    "votes": [],
+                    "votes": None,
                     "attachments": [],
                 },
                 {
@@ -208,7 +208,7 @@ class ApiTests(APITestCase):
                     "down_votes": 0,
                     "keywords": [],
                     "answers": None,
-                    "votes": [],
+                    "votes": None,
                     "attachments": [],
                 },
             ],
@@ -235,7 +235,7 @@ class ApiTests(APITestCase):
                     "down_votes": 0,
                     "keywords": [],
                     "answers": True,
-                    "votes": [],
+                    "votes": None,
                     "attachments": [],
                 },
                 {
@@ -249,13 +249,57 @@ class ApiTests(APITestCase):
                     "down_votes": 0,
                     "keywords": [],
                     "answers": None,
-                    "votes": [],
+                    "votes": None,
                     "attachments": [],
                 },
             ],
         }
         Answer.objects.create(
             question=Question.objects.get(pk=1), sessionID="session", users_answer=True
+        )
+        factory = APIClient()
+        response = factory.get("/questions/?format=json&sessionID=session")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), json.loads(json.dumps(expected)))
+
+    def test_vote_is_set_when_using_session_id(self):
+        expected = {
+            "count": 2,
+            "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "pk": 1,
+                    "title": "Test title",
+                    "is_true": False,
+                    "real_answer": "Real answer",
+                    "yes_answers": 0,
+                    "no_answers": 0,
+                    "up_votes": 1,
+                    "down_votes": 0,
+                    "keywords": [],
+                    "answers": None,
+                    "votes": True,
+                    "attachments": [],
+                },
+                {
+                    "pk": 2,
+                    "title": "Test title2",
+                    "is_true": True,
+                    "real_answer": "Real answer2",
+                    "yes_answers": 0,
+                    "no_answers": 0,
+                    "up_votes": 0,
+                    "down_votes": 0,
+                    "keywords": [],
+                    "answers": None,
+                    "votes": None,
+                    "attachments": [],
+                },
+            ],
+        }
+        Vote.objects.create(
+            question=Question.objects.get(pk=1), sessionID="session", updown=True
         )
         factory = APIClient()
         response = factory.get("/questions/?format=json&sessionID=session")
@@ -279,7 +323,7 @@ class ApiTests(APITestCase):
                     "down_votes": 0,
                     "keywords": [],
                     "answers": None,
-                    "votes": [],
+                    "votes": None,
                     "attachments": [],
                 },
             ],
@@ -306,7 +350,7 @@ class ApiTests(APITestCase):
                     "down_votes": 0,
                     "keywords": ["testkeyword"],
                     "answers": None,
-                    "votes": [],
+                    "votes": None,
                     "attachments": [],
                 },
             ],
@@ -336,7 +380,7 @@ class ApiTests(APITestCase):
                     "down_votes": 0,
                     "keywords": [],
                     "answers": None,
-                    "votes": [],
+                    "votes": None,
                     "attachments": [],
                 },
                 {
@@ -350,7 +394,7 @@ class ApiTests(APITestCase):
                     "down_votes": 0,
                     "keywords": ["answer2"],
                     "answers": None,
-                    "votes": [],
+                    "votes": None,
                     "attachments": [],
                 },
             ],
@@ -380,7 +424,7 @@ class ApiTests(APITestCase):
                     "down_votes": 0,
                     "keywords": [],
                     "answers": None,
-                    "votes": [],
+                    "votes": None,
                     "attachments": [{"pk": 1, "name": "testfile", "file": ""}],
                 },
                 {
@@ -394,7 +438,7 @@ class ApiTests(APITestCase):
                     "down_votes": 0,
                     "keywords": [],
                     "answers": None,
-                    "votes": [],
+                    "votes": None,
                     "attachments": [],
                 },
             ],
@@ -422,7 +466,7 @@ class ApiTests(APITestCase):
             "down_votes": 0,
             "keywords": [],
             "answers": None,
-            "votes": [],
+            "votes": None,
             "attachments": [],
         }
         factory = APIClient()
@@ -449,7 +493,7 @@ class ApiTests(APITestCase):
             "down_votes": 0,
             "keywords": [],
             "answers": True,
-            "votes": [],
+            "votes": None,
             "attachments": [],
         }
         Answer.objects.create(
@@ -459,3 +503,38 @@ class ApiTests(APITestCase):
         response = factory.get("/questions/1/?format=json&sessionID=session")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content), json.loads(json.dumps(expected)))
+
+    def test_can_add_new_answer(self):
+        payload = {"question": 1, "sessionID": "session", "users_answer": True}
+        answers = Answer.objects.filter(question__pk=1).count()
+        factory = APIClient()
+        response = factory.post("/answer/add/", data=payload)
+        self.assertEqual(answers + 1, Answer.objects.filter(question__pk=1).count())
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(json.loads(response.content), json.loads(json.dumps(payload)))
+
+    def test_can_add_new_vote(self):
+        payload = {"question": 1, "sessionID": "session", "updown": True}
+        votes = Vote.objects.filter(question__pk=1).count()
+        factory = APIClient()
+        response = factory.post("/vote/add/", data=payload)
+        self.assertEqual(votes + 1, Vote.objects.filter(question__pk=1).count())
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(json.loads(response.content), json.loads(json.dumps(payload)))
+
+    def test_cannot_add_duplacate_answer(self):
+        payload = {"question": 1, "sessionID": "session", "users_answer": True}
+        answers = Answer.objects.filter(question__pk=1).count()
+        factory = APIClient()
+        response = factory.post("/answer/add/", data=payload)
+        response = factory.post("/answer/add/", data=payload)
+        self.assertEqual(answers + 1, Answer.objects.filter(question__pk=1).count())
+
+    def test_cannot_add_duplicate_vote(self):
+        payload = {"question": 1, "sessionID": "session", "updown": True}
+        votes = Vote.objects.filter(question__pk=1).count()
+        factory = APIClient()
+        response = factory.post("/vote/add/", data=payload)
+        response = factory.post("/vote/add/", data=payload)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(votes + 1, Vote.objects.filter(question__pk=1).count())
