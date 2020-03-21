@@ -81,4 +81,4 @@ class Attachment(models.Model):
 
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    file = models.FileField(upload_to="media/")
+    file = models.FileField()
