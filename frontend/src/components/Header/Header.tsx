@@ -53,8 +53,8 @@ const Header = () => {
         >
           {t("browse")} <span className="sr-only">{t("active")}</span>
         </NavLink>
-        <NavLink className="nav-link capitalized" to="/link1" activeClassName="active">
-          {t("rules")}
+        <NavLink className="nav-link capitalized" to="/about" activeClassName="active">
+          {t("about")}
         </NavLink>
         <NavLink
           className="nav-link capitalized"

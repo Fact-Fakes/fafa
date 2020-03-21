@@ -28,6 +28,8 @@ const QuizQuestion: React.FC<{ question: QuestionProps; className?: string }> = 
     sessionID: string;
     users_answer: boolean;
   }) => {
+    console.log(data);
+
     const url = "/answer/add/";
     sendAnswers(url, data);
   };
@@ -116,24 +118,24 @@ const QuizQuestion: React.FC<{ question: QuestionProps; className?: string }> = 
             </button>
           </div>
         </div>
-        <div className="author-card container my-3 mx-auto">
+        <div className="author-card container my-3 pb-1 mx-auto">
           <div className="row mb-1 mt-4">
             <div className="col-5">
               <img
-                className="img-thumbnail border-0"
+                className="img-fluid m-2 border rounded"
                 src={process.env.PUBLIC_URL + "/authors/totylkoteoria.jpg"}
               />
             </div>
             <div className="col-5 pl-0">
-              <div className="d-flex flex-column">
-                <span>Weryfikuje:</span>
-                <h4>Łukasz Sakowski</h4>
+              <div className="d-flex flex-column mt-4">
+                <span className="font-size-small">Weryfikuje:</span>
+                <h4 className="font-size-medium">Łukasz Sakowski</h4>
                 <a href={"/author/" + "id"} className="text-white">
                   To tylko teoria
                 </a>
               </div>
             </div>
-            <div className="col-2">
+            <div className="col-2 justify-content-center align-items-start pt-3 d-flex">
               <img src={process.env.PUBLIC_URL + "/icons/clock.svg"} />
             </div>
           </div>
