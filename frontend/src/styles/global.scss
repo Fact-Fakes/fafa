@@ -1,6 +1,8 @@
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";
 
 @import "../components/Header/Header";
+@import "../components/quizQuestion/Question";
+@import "../components/Header/Header";
 
 body {
   margin: 0;
@@ -8,4 +10,8 @@ body {
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.capitalized {
+  text-transform: capitalize !important;
 }

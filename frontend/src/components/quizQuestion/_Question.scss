@@ -1,0 +1,33 @@
+@mixin custom-buttons {
+  @extend .d-flex, .justify-content-end, .p-2, .text-center;
+  position: relative;
+  opacity: 0.8;
+  // top: 1em;
+  right: 32px;
+  font-size: 16px;
+  max-height: 3em;
+  z-index: 2;
+}
+
+.voting-hand {
+  &-no {
+    img {
+      width: fit-content;
+    }
+    &::after {
+      @include custom-buttons;
+      background: lightcoral;
+      content: "no";
+    }
+  }
+  &-yes {
+    img {
+      width: fit-content;
+    }
+    &::after {
+      @include custom-buttons;
+      content: "yes";
+      background: greenyellow;
+    }
+  }
+}
