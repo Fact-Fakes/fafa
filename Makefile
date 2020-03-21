@@ -24,3 +24,6 @@ push-backend:
 	docker push $(PREFIX)/$(REPO_NAME)-backend:$(TAG) # Push version tagged image to repository (since this image is already pushed it will simply create or update version tag)
 
 clean:
+
+restart-frontend:
+	sudo make image-frontend && sudo docker-compose up

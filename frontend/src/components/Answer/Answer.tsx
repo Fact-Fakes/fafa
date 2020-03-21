@@ -5,19 +5,23 @@ interface AnswerProps {
   correctAnswer: boolean;
 }
 const Answer: React.FC<AnswerProps> = ({ userAnswer, correctAnswer }) => {
-  const badNotification = { txt: "Oj, to nie jest dobra odpowiedź.", color: "#ea331a" };
-  const goodNotification = {
-    txt: "Świetnie mistrzu! Ten temat już dobrze znasz.",
-    color: "#7cc245"
-  };
-
+  const badNotification = "Oj, to nie jest dobra odpowiedź.";
+  const goodNotification = "Świetnie! Ten temat już dobrze znasz.";
   return (
-    <div>
-      {userAnswer === correctAnswer ? (
-        <span className="correct">{goodNotification.txt}</span>
-      ) : (
-        <span className="incorrect">{badNotification.txt}</span>
-      )}
+    <div className="container answer ">
+      <div className="row">
+        <div
+          className={`col-12 p-4 ${
+            userAnswer === correctAnswer ? "correct" : "incorrect"
+          }`}
+        >
+          {userAnswer === correctAnswer ? (
+            <p className="text-center my-1">{goodNotification}</p>
+          ) : (
+            <p className="text-center my-1">{badNotification}</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

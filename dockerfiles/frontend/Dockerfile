@@ -11,11 +11,8 @@ RUN apt-get update; apt-get install -y curl gnupg2
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
-RUN apt-get update && apt-get install -y yarn nginx nginx-extras cron && \
-  rm -rf /var/lib/apt/lists/* && \
-  curl https://dl.eff.org/certbot-auto > /opt/certbot && \
-  chmod a+x /opt/certbot  && \
-  /opt/certbot --install-only --non-interactive
+RUN apt-get update && apt-get install -y --allow-unauthenticated yarn nginx nginx-extras cron && \
+  rm -rf /var/lib/apt/lists/*
 
 RUN rm /etc/nginx/sites-enabled/default && \
   rm /etc/nginx/nginx.conf && \

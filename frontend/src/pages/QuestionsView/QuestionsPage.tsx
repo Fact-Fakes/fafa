@@ -19,15 +19,12 @@ const QuestionsPage: React.FC = () => {
       keywords: [""],
       answers: null,
       votes: [],
-      attachments: []
+      attachments: [],
+      experts: []
     }
   ];
 
   const [questions, setQuestions] = useState<QuestionProps[]>(initialQuestions);
-
-  // const idExtension = id ? `/?id=${id}` : ""; FOR FUTURE USE
-
-  // OBECNIE NIE DZIAŁA/ CORS PROBLEM
 
   useEffect(() => {
     async function getQuestionsAsyncWrapper() {
@@ -43,18 +40,7 @@ const QuestionsPage: React.FC = () => {
   return (
     <div className="col-12 col-md-6 mx-auto">
       {questions.map((question, index) => {
-        return (
-          <>
-            {question.answers && (
-              <Answer
-                key={index}
-                correctAnswer={question.is_true}
-                userAnswer={question.answers}
-              />
-            )}
-            <Question className="my-5" key={index} question={question} />
-          </>
-        );
+        return <Question className="my-5" key={index} question={question} />;
       })}
     </div>
   );

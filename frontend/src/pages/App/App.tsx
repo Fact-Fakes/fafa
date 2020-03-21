@@ -12,6 +12,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const cookieSessionID = Cookies.get("sessionId");
     if (cookieSessionID) {
+      Cookies.set("sessionId", cookieSessionID, { expires: 30 }); // refresh cookie
       setSessionId(cookieSessionID);
     } else {
       const newId = uuid();

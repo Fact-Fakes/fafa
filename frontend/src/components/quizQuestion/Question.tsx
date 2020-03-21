@@ -1,10 +1,16 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { QuestionProps, sendAnswers } from "../../requests/AxiosRequest";
+import { QuestionProps, addAnswer } from "../../requests/AxiosRequest";
 import Cookies from "js-cookie";
+import { Redirect } from "react-router-dom";
 
-const QuizQuestion: React.FC<{ question: QuestionProps; className?: string }> = ({
+const QuizQuestion: React.FC<{
+  question: QuestionProps;
+  className?: string;
+  expanded?: boolean;
+}> = ({
   className = "",
+  expanded = false,
   question: {
     pk = 0,
     title = "",
@@ -17,21 +23,25 @@ const QuizQuestion: React.FC<{ question: QuestionProps; className?: string }> = 
     keywords = [""],
     answers = null,
     votes = [],
-    attachments = []
+    attachments = [],
+    experts = []
   }
 }) => {
   const { t } = useTranslation();
   const cookieSessionID = Cookies.get("sessionId");
 
-  const submitAnswer = async (data: {
-    question: number;
-    sessionID: string;
-    users_answer: boolean;
-  }) => {
-    console.log(data);
-
+  const submitAnswer = async (userChoice: boolean) => {
+    const data = {
+      question: pk,
+      sessionID: cookieSessionID as string,
+      users_answer: userChoice
+    };
     const url = "/answer/add/";
-    sendAnswers(url, data);
+    addAnswer(url, data);
+  };
+
+  const redirectUser = (id: string) => {
+    return <Redirect to={`/question/${id}`} />;
   };
 
   return (
@@ -79,14 +89,11 @@ const QuizQuestion: React.FC<{ question: QuestionProps; className?: string }> = 
         <div className="row d-flex justify-content-around">
           <div className="col-6 d-flex justify-content-center">
             <button
-              className="btn btn-dark p-2"
+              className="btn btn-dark p-2 text-uppercase"
               style={{ borderRadius: "3em", minWidth: "7em" }}
               onClick={() => {
-                submitAnswer({
-                  question: pk,
-                  sessionID: cookieSessionID!,
-                  users_answer: true
-                });
+                submitAnswer(true);
+                redirectUser(`${pk}`);
               }}
             >
               <img
@@ -94,19 +101,16 @@ const QuizQuestion: React.FC<{ question: QuestionProps; className?: string }> = 
                 className="mr-2"
                 alt=""
               />
-              {t("truth")}
+              {t("prawda")}
             </button>
           </div>
           <div className="col-6 d-flex justify-content-center">
             <button
-              className="btn btn-dark p-2"
+              className="btn btn-dark p-2 text-uppercase"
               style={{ borderRadius: "3em", minWidth: "7em" }}
               onClick={() => {
-                submitAnswer({
-                  question: pk,
-                  sessionID: cookieSessionID!,
-                  users_answer: false
-                });
+                submitAnswer(false);
+                redirectUser(`${pk}`);
               }}
             >
               <img
@@ -114,7 +118,7 @@ const QuizQuestion: React.FC<{ question: QuestionProps; className?: string }> = 
                 className="mr-2"
                 alt=""
               />
-              {t("fake")}
+              {t("fałsz")}
             </button>
           </div>
         </div>
@@ -123,20 +127,35 @@ const QuizQuestion: React.FC<{ question: QuestionProps; className?: string }> = 
             <div className="col-5">
               <img
                 className="img-fluid m-2 border rounded"
-                src={process.env.PUBLIC_URL + "/authors/totylkoteoria.jpg"}
+                src={
+                  experts[0]?.file
+                    ? "http://127.0.0.1:8000" + experts[0]?.file
+                    : "https://picsum.photos/100"
+                }
               />
             </div>
             <div className="col-5 pl-0">
               <div className="d-flex flex-column mt-4">
                 <span className="font-size-small">Weryfikuje:</span>
-                <h4 className="font-size-medium">Łukasz Sakowski</h4>
-                <a href={"/author/" + "id"} className="text-white">
-                  To tylko teoria
+                <h4 className="font-size-medium">{experts[0]?.name}</h4>
+                <a
+                  style={{ wordBreak: "break-word" }}
+                  href={experts[0]?.website}
+                  className="text-white"
+                >
+                  {experts[0]?.website}
                 </a>
               </div>
             </div>
             <div className="col-2 justify-content-center align-items-start pt-3 d-flex">
               <img src={process.env.PUBLIC_URL + "/icons/clock.svg"} />
+            </div>
+          </div>
+          <div className={`row mt-2 ${expanded ? "d-flex flex-row" : "d-none"}`}>
+            <div className="col-12">
+              <p className="my-2" style={{ wordBreak: "break-word" }}>
+                {real_answer}
+              </p>
             </div>
           </div>
         </div>

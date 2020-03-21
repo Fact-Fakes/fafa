@@ -3,8 +3,7 @@ import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 import { useParams } from "react-router";
 import Cookies from "js-cookie";
 
-// import PrivateRoute from "./PrivateRoute";
-import { Header } from "../components";
+import { Header, Question, ExpandedQuestion } from "../components";
 import App from "../pages/App/App";
 import { QuestionsPage } from "../pages";
 
@@ -35,6 +34,11 @@ export const Routes: React.FC = () => {
             component={() => {
               return <div>About</div>;
             }}
+          />
+          <Route
+            exact={true}
+            path={"/question/:id"}
+            component={() => <ExpandedQuestion />}
           />
           <Route
             exact={false}

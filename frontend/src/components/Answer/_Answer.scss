@@ -2,10 +2,10 @@ $error: #ea331a;
 $success: #7cc245;
 
 .correct {
-  color: $error;
-  background-color: rgba($error, 80);
+  color: $success !important;
+  background-color: lighten($success, 40%);
 }
 .incorrect {
-  color: $success;
-  background-color: rgba($success, 80);
+  color: $error !important;
+  background-color: lighten($error, 40%);
 }
