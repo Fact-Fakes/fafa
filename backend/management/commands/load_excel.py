@@ -1,12 +1,26 @@
 import openpyxl
+import os
 
 from django.core.management.base import BaseCommand, CommandError
-from backend.models import Question, Keyword
+from django.core.files import File
+from django.conf import settings
+from backend.models import Question, Keyword, Expert
+
+EXPERTS_FILES = {
+    "dr Tomasz Rożek": "dr_tomasz_rozek.jpg",
+    "Łukasz Sakowski": "lukasz_sakowski.jpg",
+}
+
+EXPERTS_WEBSITES = {
+    "dr Tomasz Rożek": "http://www.naukatolubie.pl/",
+    "Łukasz Sakowski": "https://www.totylkoteoria.pl/",
+}
 
 
 class Command(BaseCommand):  # pragma: no cover
     help = "Load excel document to database"
     row_items = (
+        "expert",
         "question",
         "keywords",
         "is_true",
@@ -25,19 +39,26 @@ class Command(BaseCommand):  # pragma: no cover
         generated_data = [*self.generate_data(excel_obj)]
         question_objects = [*self.generate_question_objects(generated_data)]
         keyword_objects = [*self.generate_keywords_objects(generated_data)]
+        experts_objects = [*self.generate_expert_objects(generated_data)]
         self.save_to_database(Question, question_objects)
         self.save_to_database(Keyword, keyword_objects)
+        self.save_expert_to_database(experts_objects)
         self.add_keywords_to_questions(generated_data)
+        self.add_experts_to_questions(generated_data)
         self.stdout.write(
             f"{len(question_objects)} questions and {len(keyword_objects)} keywords saved to database"
         )
 
     def generate_data(self, excel_obj: object):
-        for row in excel_obj.iter_rows(min_row=2, min_col=3):
+        for row in excel_obj.iter_rows(min_row=2, min_col=1):
             temp_data = {}
             for i, cell in enumerate(row):
+                if i == 1:
+                    continue
                 try:
-                    temp_data.setdefault(self.row_items[i], cell.value)
+                    temp_data.setdefault(
+                        self.row_items[i if i < 1 else i - 1], cell.value
+                    )
                 except IndexError:
                     continue
             yield temp_data
@@ -66,6 +87,15 @@ class Command(BaseCommand):  # pragma: no cover
         for item in keywords:
             yield Keyword(name=item)
 
+    def generate_expert_objects(self, data: list) -> Expert:
+        experts_temp = []
+        for item in data:
+            if key := item.get("expert"):
+                experts_temp.append(key)
+        experts_temp = set(experts_temp)
+        for item in experts_temp:
+            yield Expert(name=item, website=EXPERTS_WEBSITES.get(item, None))
+
     def add_keywords_to_questions(self, data):
         questions = Question.objects.all()
         for question in questions:
@@ -76,5 +106,24 @@ class Command(BaseCommand):  # pragma: no cover
                     question.keywords.add(*keywords)
                     question.save()
 
+    def add_experts_to_questions(self, data):
+        questions = Question.objects.all()
+        for question in questions:
+            for key in data:
+                if key.get("question") == question.title and key.get("expert"):
+                    experts = Expert.objects.filter(name=key.get("expert"))
+                    question.experts.add(*experts)
+                    question.save()
+
     def save_to_database(self, obj: object, data: list) -> None:
         obj.objects.bulk_create(data)
+
+    def save_expert_to_database(self, data: list) -> None:
+        for expert in data:
+            if _file := EXPERTS_FILES.get(expert.name):
+                with open(f"backend/management/commands/{_file}", "rb") as f:
+                    _actual_file = File(f, name=_file)
+                    expert.file = _actual_file
+                    expert.save()
+                    continue
+            expert.save()

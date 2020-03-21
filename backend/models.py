@@ -12,6 +12,14 @@ class Keyword(models.Model):
         return self.name
 
 
+class Expert(models.Model):
+    """Experts for questions"""
+
+    name = models.CharField(max_length=250, unique=True)
+    file = models.FileField(upload_to="experts/")
+    website = models.URLField(blank=True)
+
+
 class Question(models.Model):
     """Single question with basic attributes"""
 
@@ -23,9 +31,13 @@ class Question(models.Model):
     up_votes = models.IntegerField(default=0)
     down_votes = models.IntegerField(default=0)
     keywords = models.ManyToManyField(Keyword, related_name="questions", blank=True)
+    experts = models.ManyToManyField(Expert, related_name="questions", blank=True)
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ("id",)
 
 
 class Answer(models.Model):

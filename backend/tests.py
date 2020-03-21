@@ -8,7 +8,7 @@ from rest_framework.test import APIClient, APITestCase
 
 import mock
 
-from backend.models import Keyword, Question, Answer, Vote, Attachment
+from backend.models import Keyword, Question, Answer, Vote, Attachment, Expert
 
 
 class ModelTests(TestCase):
@@ -16,6 +16,7 @@ class ModelTests(TestCase):
 
     def setUp(self):
         self.keyword = Keyword.objects.create(name="coronavirus")
+        self.expert = Expert.objects.create(name="dr Coronavirus")
         self.question = Question.objects.create(
             title="Does Corona beer cause COVID-19 desease?",
             real_answer="Coronavirus, a recent flu-like disease spreading worldwide, "
@@ -154,6 +155,23 @@ class ModelTests(TestCase):
         self.assertTrue(isinstance(file_model, Attachment))
         self.assertEqual(file_model.name, file_mock.name)
 
+    def test_create_expert(self):
+        """Test if expert can be created"""
+        new_expert = Expert.objects.create(name="dr Test", website="https://test.pl/")
+        self.assertTrue(isinstance(new_expert, Expert))
+        self.assertEqual(new_expert.name, "dr Test")
+        self.assertNotEqual(self.expert, new_expert)
+        self.assertEqual(self.expert.id, 1)
+        self.assertEqual(new_expert.id, 2)
+
+    def test_assign_experts_to_question(self):
+        """Test if multiple keywords can be assigned to a question ignoring duplicates"""
+        new_expert = Expert.objects.create(name="dr Test", website="https://test.pl/")
+        self.question.experts.add(self.expert)
+        self.question.experts.add(new_expert)
+        self.question.experts.add(new_expert)
+        self.assertEqual(len(self.question.experts.all()), 2)
+
 
 class ApiTests(APITestCase):
     def setUp(self):
@@ -196,6 +214,7 @@ class ApiTests(APITestCase):
                     "answers": None,
                     "votes": None,
                     "attachments": [],
+                    "experts": [],
                 },
                 {
                     "pk": 2,
@@ -210,6 +229,7 @@ class ApiTests(APITestCase):
                     "answers": None,
                     "votes": None,
                     "attachments": [],
+                    "experts": [],
                 },
             ],
         }
@@ -237,6 +257,7 @@ class ApiTests(APITestCase):
                     "answers": True,
                     "votes": None,
                     "attachments": [],
+                    "experts": [],
                 },
                 {
                     "pk": 2,
@@ -251,6 +272,7 @@ class ApiTests(APITestCase):
                     "answers": None,
                     "votes": None,
                     "attachments": [],
+                    "experts": [],
                 },
             ],
         }
@@ -281,6 +303,7 @@ class ApiTests(APITestCase):
                     "answers": None,
                     "votes": True,
                     "attachments": [],
+                    "experts": [],
                 },
                 {
                     "pk": 2,
@@ -295,6 +318,7 @@ class ApiTests(APITestCase):
                     "answers": None,
                     "votes": None,
                     "attachments": [],
+                    "experts": [],
                 },
             ],
         }
@@ -325,6 +349,7 @@ class ApiTests(APITestCase):
                     "answers": None,
                     "votes": None,
                     "attachments": [],
+                    "experts": [],
                 },
             ],
         }
@@ -352,6 +377,7 @@ class ApiTests(APITestCase):
                     "answers": None,
                     "votes": None,
                     "attachments": [],
+                    "experts": [],
                 },
             ],
         }
@@ -382,6 +408,7 @@ class ApiTests(APITestCase):
                     "answers": None,
                     "votes": None,
                     "attachments": [],
+                    "experts": [],
                 },
                 {
                     "pk": 2,
@@ -396,6 +423,7 @@ class ApiTests(APITestCase):
                     "answers": None,
                     "votes": None,
                     "attachments": [],
+                    "experts": [],
                 },
             ],
         }
@@ -426,6 +454,7 @@ class ApiTests(APITestCase):
                     "answers": None,
                     "votes": None,
                     "attachments": [{"pk": 1, "name": "testfile", "file": ""}],
+                    "experts": [],
                 },
                 {
                     "pk": 2,
@@ -440,6 +469,7 @@ class ApiTests(APITestCase):
                     "answers": None,
                     "votes": None,
                     "attachments": [],
+                    "experts": [],
                 },
             ],
         }
@@ -449,6 +479,63 @@ class ApiTests(APITestCase):
         att = Attachment.objects.create(question=q, name="testfile", file=file_mock)
         factory = APIClient()
         expected["results"][0]["attachments"][0]["file"] = f"/media/{att.file.name}"
+        response = factory.get("/questions/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), json.loads(json.dumps(expected)))
+
+    def test_question_list_contains_experts(self):
+        expected = {
+            "count": 2,
+            "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "pk": 1,
+                    "title": "Test title",
+                    "is_true": False,
+                    "real_answer": "Real answer",
+                    "yes_answers": 0,
+                    "no_answers": 0,
+                    "up_votes": 0,
+                    "down_votes": 0,
+                    "keywords": [],
+                    "answers": None,
+                    "votes": None,
+                    "attachments": [],
+                    "experts": [
+                        {
+                            "name": "dr Tomasz Rożek",
+                            "website": "https://naukatolubie.pl/",
+                            "file": None,
+                        }
+                    ],
+                },
+                {
+                    "pk": 2,
+                    "title": "Test title2",
+                    "is_true": True,
+                    "real_answer": "Real answer2",
+                    "yes_answers": 0,
+                    "no_answers": 0,
+                    "up_votes": 0,
+                    "down_votes": 0,
+                    "keywords": [],
+                    "answers": None,
+                    "votes": None,
+                    "attachments": [],
+                    "experts": [],
+                },
+            ],
+        }
+        file_mock = mock.MagicMock(spec=File)
+        file_mock.name = "test.jpg"
+        q = Question.objects.get(pk=1)
+        exp = Expert.objects.create(
+            name="dr Tomasz Rożek", website="https://naukatolubie.pl/", file=file_mock
+        )
+        q.experts.add(exp)
+        factory = APIClient()
+        expected["results"][0]["experts"][0]["file"] = f"/media/{exp.file.name}"
         response = factory.get("/questions/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content), json.loads(json.dumps(expected)))
@@ -468,6 +555,7 @@ class ApiTests(APITestCase):
             "answers": None,
             "votes": None,
             "attachments": [],
+            "experts": [],
         }
         factory = APIClient()
         response = factory.get("/questions/1/?format=json")
@@ -495,6 +583,7 @@ class ApiTests(APITestCase):
             "answers": True,
             "votes": None,
             "attachments": [],
+            "experts": [],
         }
         Answer.objects.create(
             question=Question.objects.get(pk=1), sessionID="session", users_answer=True
