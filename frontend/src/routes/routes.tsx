@@ -42,19 +42,20 @@ export const Routes: React.FC = () => {
             component={() => <QuestionsPage />}
           />
           <Route
-            path="*"
-            component={() => (
-              <div className="text-center">
-                <h2 className="text-white">404!</h2>
-                <h3 className="text-muted">
-                  Something went wrong and we're working on it!
-                  <img
-                    className="img-fluid"
-                    src={process.env.PUBLIC_URL + "/icons/wrench_icon.png"}
-                  ></img>
-                </h3>
-              </div>
-            )}
+            component={() => {
+              return (
+                <div className="text-center">
+                  <h2 className="text-white">404!</h2>
+                  <h3 className="text-muted">
+                    Something went wrong and we're working on it!
+                    <img
+                      className="img-fluid"
+                      src={process.env.PUBLIC_URL + "/icons/wrench_icon.png"}
+                    ></img>
+                  </h3>
+                </div>
+              );
+            }}
           />
         </Switch>
       </div>
