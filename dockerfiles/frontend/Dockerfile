@@ -1,6 +1,6 @@
-FROM gs1-npws_backend:latest as backend
+# FROM gs1-npws_backend:latest as backend
 
-RUN python /backend/manage.py collectstatic --noinput
+# RUN python /backend/manage.py collectstatic --noinput
 
 ###
 
@@ -17,7 +17,6 @@ RUN apt-get update && apt-get install -y yarn nginx nginx-extras cron && \
   chmod a+x /opt/certbot  && \
   /opt/certbot --install-only --non-interactive
 
-COPY ./config/frontend/ /config
 RUN rm /etc/nginx/sites-enabled/default && \
   rm /etc/nginx/nginx.conf && \
   ln -s /config/nginx/nginx.conf /etc/nginx/sites-enabled/default && \
@@ -29,7 +28,7 @@ RUN rm /etc/nginx/sites-enabled/default && \
   # chmod 0644 /etc/cron.d/letsencrypt && \
   touch /var/log/cron.log
 
-COPY ./frontend/package.json /frontend/yarn.lock /frontend/
+COPY ./frontend/package.json /frontend/
 WORKDIR /frontend
 RUN yarn
 

@@ -26,9 +26,9 @@ services:
   #   command: /scripts/wait-for-it.sh ${DB_HOST}:${DB_PORT} -- python /backend/manage.py runserver 0.0.0.0:xxxx
 
   frontend:
-    volumes:
-      - ./frontend/src:/frontend/src
-      - ./frontend/public:/frontend/public
+    # volumes:
+    #   - ./frontend/src:/frontend/src
+    #   - ./frontend/public:/frontend/public
     command: yarn start
     ports:
       - "3000:3000"
