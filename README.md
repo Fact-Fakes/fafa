@@ -2,102 +2,96 @@
 [![Coverage](https://gitlab.com/daniel.rozycki/fakebuster/badges/master/coverage.svg)](https://gitlab.com/daniel.rozycki/fakebuster)
 
 
-# FakeBuster
+# FAFA
 
-This is repository for awesome project named FakeBuster
+This is repository for awesome project named FAFA developed for [HackCrisis hackathon](https://www.hackcrisis.com/)
 
+This project is written in Django (+ Django REST Framework) and React
 
-# Prerequisites
+## Prerequisites
 
- - Python 3.8 (`sudo apt install python3.8`)
- - Pipenv (`python3.8 -m pip install pipenv`) 
+ - [Docker](https://www.docker.com/) (Use this for fast setup of app)
+ - [Yarn](https://classic.yarnpkg.com/en/)
+ - [Python 3.8](https://www.python.org/)
+ - [Pipenv](https://github.com/pypa/pipenv) 
 
-# Running
+## Running app in production mode
+Running in production mode requires [Docker](https://www.docker.com/) 
 
-> Default settings are `core/settings/development` if You wish to change the settings use this command: `python manage.py runserver --settings=core.settings.production`
+- Run in root folder `docker-compose up -d --build`
 
- 1. Install packages from Pipfile `pipenv install`
+## Running app in development mode
+
+### Backend (Django with Django REST Framework)
+
+> To run with docker go to `dockerfiles/backend/` and run `docker-compose up -d --build`
+
+ 1. In root directory install packages  `pipenv install`
  2. Open virtual environment `pipenv shell`
- 3. Create migrations `python manage.py makemigrations`
+ 3. Make migrations `python manage.py makemigrations`
  4. Migrate `python manage.py migrate`
- 5. Load data from questions.xlsx `python manage.py load_excel`
+ 5. Load content from excel file `python manage.py load_excel`
  6. Start Django server `python manage.py runserver`
- 7. Go to `localhost:8000` to see main page
- > To add package run e.g. `pipenv install package_name`
 
-## Running with docker
+### Frontend (React)
 
-If you want to run the latest version from the source first run.
+> To use docker, in root directory run `docker-compose up -d --build`
 
-```bash
-make images
-```
+1. In `frontend/` directory run `yarn install`
+2. Run `yarn start` to launch development server
 
-If not just run commands bellow, they start the application based on the latest [published](https://hub.docker.com/u/fakebuster) docker images:
+## Endpoints
+Backend contains 4 endpoints
 
-```bash
-docker-compose pull
-docker-compose up
-```
+#### 1. Getting question list
 
-Now visit: `http://0.0.0.0:3000/`.
+ - URL
+`/questions/?format=json`
+- Method
+`GET`
+- URL Params
 
-# Endpoints
+`sessionID` -> SessionID cookie to identify user
 
-### Getting questions
+`search` -> String to search among title and keywords
 
-*  ***URL***
+`page` -> Number of page
 
-GET `/questions/?format=json`
 
-*  ***URL PARAMS***
+#### 2. Getting specify question
 
-`sessionID=string max 255` -> By adding this param We can get user answers (Use as required)
+ - URL
+`/questions/<INT:PK>/?format=json`
+- Method
+`GET`
+- URL Params
 
-`search=string` -> This will search in title and keywords of questions
+`sessionID` -> SessionID cookie to identify user
 
-Above params can be chained e.g. `/questions/?format=json&sessionID=sampleid&search=samplesearch`
+#### 3. Add answer to question
 
-### Getting one question
+ - URL
+`/answer/add/`
+- Method
+`POST`
+- POST Params
 
-*  ***URL***
+`question` -> ID of question to answer (required)
 
-GET `/questions/<QUESTION_ID:INTEGER>/?format=json`
+`sessionID` -> SessionID cookie to identify user
 
-* ***URL PARAMS**
+`users_answer` -> Bool if answer is YES (true) or NO (false)
 
-Same as above
+#### 4 Add vote for question
 
-### Adding answer
+ - URL
+`/vote/add/`
+- Method
+`POST`
+- POST Params
 
-*  ***URL***
+`question` -> ID of question to answer (required)
 
-POST `/answer/add/`
+`sessionID` -> SessionID cookie to identify user
 
-*  ***POST PARAMS***
-
-`question=int` -> Question PK
-
-`sessionID=string max 255` -> Required parameter so user is saved to question
-
-`users_answer=bool` -> If True user clicked YES, otherwise user clicked NO
-
-Response status code : 201
-Response content : same as post params
-
-### Adding vote
-
-*  ***URL***
-
-POST `/vote/add/`
-
-*  ***POST PARAMS***
-
-`question=int` -> Question PK
-
-`sessionID=string max 255` -> Required parameter so user is saved to question
-
-`updown=bool` -> If True user clicked UP ARROW, otherwise user clicked DOWN ARROW
-
-Response status code : 201
-Response content : same as post params
+`updown` -> Bool if vote is UP (true) or DOWN (false)
