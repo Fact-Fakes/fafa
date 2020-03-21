@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
+
   const { t } = useTranslation();
   return (
     <nav className="navbar navbar-expand-md navbar-light bg-light sticky-top navbar justify-content-between">
@@ -15,7 +17,9 @@ const Header = () => {
         aria-expanded="false"
         aria-label="Toggle navigation"
         onClick={() => {
-          console.log("Menu expanded!");
+          setIsMenuOpen(prevState => {
+            return !prevState;
+          });
         }}
       >
         <span className="navbar-toggler-icon"></span>
@@ -31,7 +35,13 @@ const Header = () => {
         <h2 className="d-inline-flex mb-0">FakeBuster</h2>
       </a>
 
-      <ul className="navbar-nav ml-auto d-md-flex d-none">
+      <ul
+        className={`navbar-nav ml-auto d-md-flex ${
+          isMenuOpen
+            ? "d-none"
+            : "d-flex flex-column col-12 text-center font-size-larger"
+        }`}
+      >
         <NavLink
           exact={true}
           className="nav-link  capitalized"
@@ -51,7 +61,7 @@ const Header = () => {
           {t("queue")}
         </NavLink>
         <NavLink
-          className="btn btn-link capitalized"
+          className="nav-link capitalized"
           to="/not-existing"
           activeClassName="active"
         >

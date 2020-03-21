@@ -28,23 +28,23 @@ export interface QuestionProps {
   up_votes: number;
   down_votes: number;
   keywords: string[];
-  answers: null;
+  answers: null | boolean;
   votes: any[];
   attachments: any[];
 }
 
-async function getQuestions(path: string) {
-  const res: any = await request({
-    url: "/token/refresh/",
-    method: "GET"
-  });
-  console.log(res);
-}
-
-export { getQuestions };
-
 function request<T>(config: AxiosRequestConfig) {
   return axiosInstance.request<T>(config);
 }
+
+async function getQuestions(url: string) {
+  const response: any = await request({
+    url,
+    method: "GET"
+  });
+  return response.data.results as QuestionProps[];
+}
+
+export { getQuestions };
 
 export default request;

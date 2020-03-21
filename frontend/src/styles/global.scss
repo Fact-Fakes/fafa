@@ -3,6 +3,7 @@
 @import "../components/Header/Header";
 @import "../components/quizQuestion/Question";
 @import "../components/Header/Header";
+@import "../components/Answer/Answer";
 
 body {
   margin: 0;
@@ -14,4 +15,8 @@ body {
 
 .capitalized {
   text-transform: capitalize !important;
+}
+
+.font-size-larger {
+  font-size: larger !important;
 }

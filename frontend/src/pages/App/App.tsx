@@ -33,13 +33,20 @@ const App: React.FC = () => {
         <div className="row">
           <div className="col-6 mx-auto">
             <Question
-              questionId={12}
-              question={initialQuestion}
-              answer="no"
-              questionTitle="Czy warto było szaleć tak?"
-              expertName="Jan Nowak"
-              expertDetailsURL="http://www.google.com"
-              tags={[{ title: "", link: "" }]}
+              question={{
+                pk: 0,
+                title: "",
+                is_true: true,
+                real_answer: "",
+                yes_answers: 0,
+                no_answers: 0,
+                up_votes: 0,
+                down_votes: 0,
+                keywords: [""],
+                answers: null,
+                votes: [],
+                attachments: []
+              }}
             />
           </div>
         </div>
