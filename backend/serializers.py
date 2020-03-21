@@ -1,4 +1,4 @@
-from backend.models import Question, Answer, Keyword, Attachment, Vote
+from backend.models import Question, Answer, Keyword, Attachment, Vote, Expert
 from rest_framework import serializers
 
 
@@ -26,6 +26,14 @@ class AnswerSerializer(serializers.ModelSerializer):
         fields = ("question", "sessionID", "users_answer")
 
 
+class ExpertSerializer(serializers.ModelSerializer):
+    """Serializer for Expert model. Used only in AllQuestionsSerializer"""
+
+    class Meta:
+        model = Expert
+        fields = ("name", "file", "website")
+
+
 class AllQuestionsSerializer(serializers.ModelSerializer):
     """Serializer for Question model with ForeignKey and ManyToMany relationships. Used only in Questions view."""
 
@@ -33,6 +41,7 @@ class AllQuestionsSerializer(serializers.ModelSerializer):
     votes = serializers.SerializerMethodField()
     keywords = serializers.SerializerMethodField()
     attachments = serializers.SerializerMethodField()
+    experts = serializers.SerializerMethodField()
 
     def get_answers(self, obj):
         """ Method for quering answers based on sessionID """
@@ -65,6 +74,12 @@ class AllQuestionsSerializer(serializers.ModelSerializer):
         keywords = Keyword.objects.filter(questions=obj).values_list("name", flat=True)
         return keywords
 
+    def get_experts(self, obj):
+        """ Method for getting experts based on question """
+        experts = Expert.objects.filter(questions=obj)
+        serializer = ExpertSerializer(experts, many=True)
+        return serializer.data
+
     class Meta:
         model = Question
         fields = (
@@ -80,4 +95,5 @@ class AllQuestionsSerializer(serializers.ModelSerializer):
             "answers",
             "votes",
             "attachments",
+            "experts",
         )
