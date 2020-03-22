@@ -40,6 +40,7 @@ const QuizQuestion: React.FC<{
       users_answer: userChoice
     };
     const url = "/answer/add/";
+    console.log(data);
     addAnswer(url, data); // this works very counter-niuitive as if user answered we can't answer again but have no way to know if we did.
   };
 
