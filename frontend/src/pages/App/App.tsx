@@ -23,17 +23,22 @@ const App: React.FC = () => {
     experts: []
   };
   const [questions, setQuestions] = useState<QuestionProps[]>([]);
+  const [hasMore, setHasMore] = useState<boolean>(false);
   const cookieSessionID = Cookies.get("sessionId");
 
   const getQuestionsWrapper = async (page: any) => {
-    const fetchedQuestions = await getQuestions(
+    await getQuestions(
       `questions${page ? `/?page=${page}&sessionID=${cookieSessionID}` : ""}`
-    );
-    console.log(fetchedQuestions);
-    setQuestions(prevState => {
-      const newState = prevState.concat(fetchedQuestions);
-      return newState;
-    });
+    )
+      .then(data => {
+        setQuestions(prevState => {
+          const newState = prevState.concat(data);
+          return newState;
+        });
+      })
+      .catch(e => {
+        setHasMore(false);
+      });
   };
 
   return (
@@ -51,16 +56,16 @@ const App: React.FC = () => {
           <InfiniteScroll
             pageStart={1}
             loadMore={async page => await getQuestionsWrapper(page)}
-            hasMore={true || false}
+            hasMore={!hasMore}
             initialLoad={true}
             loader={
               <div className="loader" key={0}>
-                Loading ...
+                {!hasMore ? "" : "Loading ..."}
               </div>
             }
           >
-            {questions.map(question => {
-              return <Question question={question} />;
+            {questions.map((question, index) => {
+              return <Question key={index} question={question} />;
             })}
           </InfiniteScroll>
         </div>

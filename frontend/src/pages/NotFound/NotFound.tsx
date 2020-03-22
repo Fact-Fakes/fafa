@@ -8,6 +8,7 @@ const About: React.FC = () => {
         Something went wrong and we're working on it!
         <img
           className="img-fluid"
+          alt="wrench working_on_it not_found"
           src={process.env.PUBLIC_URL + "/icons/wrench_icon.png"}
         ></img>
       </h3>
