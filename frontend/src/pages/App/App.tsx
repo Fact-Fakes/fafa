@@ -1,25 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { v4 as uuid } from "uuid";
-import Cookies from "js-cookie";
+import React from "react";
 import { useTranslation } from "react-i18next";
-
-import { Question } from "../../components";
 
 const App: React.FC = () => {
   const { t } = useTranslation();
-  const [sessionId, setSessionId] = useState<string>("");
-
-  useEffect(() => {
-    const cookieSessionID = Cookies.get("sessionId");
-    if (cookieSessionID) {
-      Cookies.set("sessionId", cookieSessionID, { expires: 30 }); // refresh cookie
-      setSessionId(cookieSessionID);
-    } else {
-      const newId = uuid();
-      setSessionId(newId);
-      Cookies.set("sessionId", newId, { expires: 30 });
-    }
-  }, []);
 
   return (
     <div className="App">

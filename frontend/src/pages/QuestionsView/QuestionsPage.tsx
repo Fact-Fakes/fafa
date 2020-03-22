@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getQuestions, QuestionProps } from "../../requests/AxiosRequest";
 import { Question, Answer } from "../../components";
+import Cookies from "js-cookie";
 
 const QuestionsPage: React.FC = () => {
   const { page, id } = useParams();
@@ -17,7 +18,7 @@ const QuestionsPage: React.FC = () => {
       up_votes: 0,
       down_votes: 0,
       keywords: [""],
-      answers: null,
+      answers: null, //USER answer
       votes: [],
       attachments: [],
       experts: []
@@ -25,11 +26,11 @@ const QuestionsPage: React.FC = () => {
   ];
 
   const [questions, setQuestions] = useState<QuestionProps[]>(initialQuestions);
-
+  const cookieSessionID = Cookies.get("sessionId");
   useEffect(() => {
     async function getQuestionsAsyncWrapper() {
       const fetchedQuestions = await getQuestions(
-        `questions${page ? `/?page=${page}` : ""}`
+        `questions${page ? `/?page=${page}&sessionID=${cookieSessionID}` : ""}`
       );
       setQuestions(fetchedQuestions);
     }

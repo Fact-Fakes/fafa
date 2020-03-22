@@ -1,7 +1,7 @@
 import React from "react";
 
 interface AnswerProps {
-  userAnswer: boolean;
+  userAnswer: boolean | null;
   correctAnswer: boolean;
 }
 const Answer: React.FC<AnswerProps> = ({ userAnswer, correctAnswer }) => {

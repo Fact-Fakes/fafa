@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { QuestionProps, addAnswer } from "../../requests/AxiosRequest";
 import Cookies from "js-cookie";
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const QuizQuestion: React.FC<{
   question: QuestionProps;
@@ -17,18 +17,21 @@ const QuizQuestion: React.FC<{
     is_true = true,
     real_answer = "",
     yes_answers = 0,
-    no_answers = 0,
-    up_votes = 0,
-    down_votes = 0,
-    keywords = [""],
-    answers = null,
+    no_answers = 0, // how many people voted no
+    up_votes = 0, // how many people voted for it to be checked
+    down_votes = 0, // how many people voted against it to be checked
+    keywords = [""], // tags
+    answers = null, // USER ANSWER
     votes = [],
     attachments = [],
     experts = []
   }
 }) => {
   const { t } = useTranslation();
+  let history = useHistory();
   const cookieSessionID = Cookies.get("sessionId");
+  const [hasUserVoted, setHasUserVoted] = useState<boolean>(false);
+  const numberOfAllVotes = yes_answers + no_answers;
 
   const submitAnswer = async (userChoice: boolean) => {
     const data = {
@@ -37,12 +40,16 @@ const QuizQuestion: React.FC<{
       users_answer: userChoice
     };
     const url = "/answer/add/";
-    addAnswer(url, data);
+    addAnswer(url, data); // this works very counter-niuitive as if user answered we can't answer again but have no way to know if we did.
   };
 
-  const redirectUser = (id: string) => {
-    return <Redirect to={`/question/${id}`} />;
-  };
+  useEffect(() => {
+    if (answers !== null) {
+      setHasUserVoted(true); // check if user of this session id already voted
+    } else {
+      setHasUserVoted(false);
+    }
+  }, []);
 
   return (
     <div data-questionid={pk} className={"container border rounded " + className}>
@@ -52,7 +59,7 @@ const QuizQuestion: React.FC<{
             return (
               <a
                 key={index}
-                href={"https://ourpage/tags/" + keyword}
+                href={`/${keyword}`}
                 className="badge badge-secondary mr-1 capitalized"
               >
                 {keyword}
@@ -61,10 +68,7 @@ const QuizQuestion: React.FC<{
           })}
         </div>
         <div className="col-12 mt-3 px-3">
-          <a
-            className="text-white quote-icon text-center"
-            href={`http://ourpage/links/${pk}`}
-          >
+          <a className="text-white quote-icon text-center" href={`/question/${pk}`}>
             <h3 className="mx-4">{title}</h3>
           </a>
         </div>
@@ -87,13 +91,18 @@ const QuizQuestion: React.FC<{
       </div>
       <div className="container mb-2">
         <div className="row d-flex justify-content-around">
-          <div className="col-6 d-flex justify-content-center">
+          <div
+            className={`col-6 ${
+              hasUserVoted ? "d-none" : "d-flex"
+            } justify-content-center`}
+          >
             <button
               className="btn btn-dark p-2 text-uppercase"
               style={{ borderRadius: "3em", minWidth: "7em" }}
-              onClick={() => {
-                submitAnswer(true);
-                redirectUser(`${pk}`);
+              onClick={async () => {
+                await submitAnswer(true);
+
+                history.push(`/question/${pk}`);
               }}
             >
               <img
@@ -104,13 +113,17 @@ const QuizQuestion: React.FC<{
               {t("prawda")}
             </button>
           </div>
-          <div className="col-6 d-flex justify-content-center">
+          <div
+            className={`col-6 ${
+              hasUserVoted ? "d-none" : "d-flex"
+            } justify-content-center`}
+          >
             <button
               className="btn btn-dark p-2 text-uppercase"
               style={{ borderRadius: "3em", minWidth: "7em" }}
-              onClick={() => {
-                submitAnswer(false);
-                redirectUser(`${pk}`);
+              onClick={async () => {
+                await submitAnswer(false);
+                history.push(`/question/${pk}`);
               }}
             >
               <img
@@ -121,6 +134,21 @@ const QuizQuestion: React.FC<{
               {t("fałsz")}
             </button>
           </div>
+          <p
+            className={`my-1 text-muted text-center ${
+              hasUserVoted ? "d-flex" : "d-none"
+            }`}
+          >
+            Jak głosowali inni:
+          </p>
+          <div className={`col-12 ${hasUserVoted ? "d-flex" : "d-none"}`}>
+            <p className="my-0 text-muted">
+              Głosujących PRAWDA: {yes_answers + "/" + numberOfAllVotes}
+            </p>
+            <p className="my-0 text-muted">
+              Głosujących FAŁSZ: {no_answers + "/" + numberOfAllVotes}
+            </p>
+          </div>
         </div>
         <div className="author-card container my-3 pb-1 mx-auto">
           <div className="row mb-1 mt-4">
@@ -128,9 +156,8 @@ const QuizQuestion: React.FC<{
               <img
                 className="img-fluid m-2 border rounded"
                 src={
-                  experts[0]?.file
-                    ? "http://127.0.0.1:8000" + experts[0]?.file
-                    : "https://picsum.photos/100"
+                  process.env.REACT_APP_API_BASE + experts[0]?.file ||
+                  "https://picsum.photos/100"
                 }
               />
             </div>

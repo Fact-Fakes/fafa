@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { v4 as uuid } from "uuid";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 import { useParams } from "react-router";
 import Cookies from "js-cookie";
@@ -7,21 +8,21 @@ import { Header, Question, ExpandedQuestion } from "../components";
 import App from "../pages/App/App";
 import { QuestionsPage } from "../pages";
 
-export const BasicParamsComponent = () => {
-  const { id = "" } = useParams();
-
-  Cookies.set("PostId", id, { expires: 1 });
-
-  const cookieValue = Cookies.get("PostId");
-
-  return (
-    <div>
-      The id is {id}, while the cookie value is: {cookieValue}
-    </div>
-  );
-};
-
 export const Routes: React.FC = () => {
+  const [sessionId, setSessionId] = useState<string>("");
+
+  useEffect(() => {
+    const cookieSessionID = Cookies.get("sessionId");
+    if (cookieSessionID) {
+      Cookies.set("sessionId", cookieSessionID, { expires: 30 }); // refresh cookie
+      setSessionId(cookieSessionID);
+    } else {
+      const newId = uuid();
+      setSessionId(newId);
+      Cookies.set("sessionId", newId, { expires: 30 });
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <Header />

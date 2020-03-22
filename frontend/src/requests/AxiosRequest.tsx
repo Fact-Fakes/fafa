@@ -62,8 +62,6 @@ async function getQuestion(url: string) {
     url,
     method: "GET"
   });
-
-  console.log(response.data);
   return response.data as QuestionProps;
 }
 
