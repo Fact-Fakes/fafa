@@ -1,14 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
-import Cookies from "js-cookie";
-
-const COOKIE_EXPIRES = 30; // 30 days
-const CSRF_ENABLED = process.env.REACT_APP_CSRF_ENABLED || false;
 export const baseURL = process.env.REACT_APP_API_BASE;
-
 if (!baseURL) {
   throw new Error("REACT_APP_API_BASE is not defined in .env file");
 }
-
 const axiosInstance = axios.create({
   baseURL,
   headers: {
@@ -18,6 +12,11 @@ const axiosInstance = axios.create({
   xsrfCookieName: "csrftoken"
 });
 
+interface Expert {
+  name: string;
+  file: string;
+  website: string;
+}
 export interface QuestionProps {
   pk: number;
   title: string;
@@ -31,6 +30,17 @@ export interface QuestionProps {
   answers: null | boolean;
   votes: any[];
   attachments: any[];
+  experts: Expert[];
+}
+export interface AddAnswerProps {
+  question: number;
+  sessionID: string;
+  users_answer: boolean;
+}
+export interface AddVoteProps {
+  question: number;
+  sessionID: string;
+  updown: boolean;
 }
 
 function request<T>(config: AxiosRequestConfig) {
@@ -44,16 +54,35 @@ async function getQuestions(url: string) {
   });
   return response.data.results as QuestionProps[];
 }
+async function getQuestion(url: string) {
+  const response: any = await request({
+    url,
+    method: "GET"
+  });
+  return response.data as QuestionProps;
+}
 
-async function sendAnswers(url: string, data: any) {
+async function addAnswer(url: string, data: AddAnswerProps) {
   const response: any = await request({
     url,
     method: "POST",
     data
   });
-  return response.data.results as QuestionProps[];
+  return response.data.results as AddAnswerProps[];
 }
 
-export { getQuestions, sendAnswers };
+async function addVote(url: string, data: AddVoteProps) {
+  const response: any = await request({
+    url,
+    method: "POST",
+    data: {
+      question: data.question,
+      sessionID: data.sessionID,
+      updown: data.updown
+    }
+  });
+  return response.data.results as AddVoteProps[];
+}
 
+export { getQuestions, addAnswer, addVote, getQuestion };
 export default request;

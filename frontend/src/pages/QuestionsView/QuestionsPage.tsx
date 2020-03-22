@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getQuestions, QuestionProps } from "../../requests/AxiosRequest";
-import { Question, Answer } from "../../components";
+import { Question } from "../../components";
+import Cookies from "js-cookie";
 
 const QuestionsPage: React.FC = () => {
-  const { page, id } = useParams();
+  const { page } = useParams();
 
   const initialQuestions = [
     {
@@ -17,22 +18,19 @@ const QuestionsPage: React.FC = () => {
       up_votes: 0,
       down_votes: 0,
       keywords: [""],
-      answers: null,
+      answers: null, //USER answer
       votes: [],
-      attachments: []
+      attachments: [],
+      experts: []
     }
   ];
 
   const [questions, setQuestions] = useState<QuestionProps[]>(initialQuestions);
-
-  // const idExtension = id ? `/?id=${id}` : ""; FOR FUTURE USE
-
-  // OBECNIE NIE DZIAŁA/ CORS PROBLEM
-
+  const cookieSessionID = Cookies.get("sessionId");
   useEffect(() => {
     async function getQuestionsAsyncWrapper() {
       const fetchedQuestions = await getQuestions(
-        `questions${page ? `/?page=${page}` : ""}`
+        `questions${page ? `/?page=${page}&sessionID=${cookieSessionID}` : ""}`
       );
       setQuestions(fetchedQuestions);
     }
@@ -43,18 +41,7 @@ const QuestionsPage: React.FC = () => {
   return (
     <div className="col-12 col-md-6 mx-auto">
       {questions.map((question, index) => {
-        return (
-          <>
-            {question.answers && (
-              <Answer
-                key={index}
-                correctAnswer={question.is_true}
-                userAnswer={question.answers}
-              />
-            )}
-            <Question className="my-5" key={index} question={question} />
-          </>
-        );
+        return <Question className="my-5" key={index} question={question} />;
       })}
     </div>
   );

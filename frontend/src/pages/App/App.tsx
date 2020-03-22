@@ -1,24 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { v4 as uuid } from "uuid";
-import Cookies from "js-cookie";
+import React from "react";
 import { useTranslation } from "react-i18next";
-
-import { Question } from "../../components";
+import InfiniteScroll from "react-infinite-scroller";
 
 const App: React.FC = () => {
   const { t } = useTranslation();
-  const [sessionId, setSessionId] = useState<string>("");
-
-  useEffect(() => {
-    const cookieSessionID = Cookies.get("sessionId");
-    if (cookieSessionID) {
-      setSessionId(cookieSessionID);
-    } else {
-      const newId = uuid();
-      setSessionId(newId);
-      Cookies.set("sessionId", newId, { expires: 30 });
-    }
-  }, []);
 
   return (
     <div className="App">
@@ -32,6 +17,14 @@ const App: React.FC = () => {
               {t("Sprawdzaj swoją wiedzę i bądź na bieżąco")}
             </span>
           </div>
+          {/* <InfiniteScroll
+        pageStart={0}
+        loadMore={getQuestions(`/?page=${page}&sessionID=${cookieSessionID}`);
+    hasMore={true || false}
+    loader={<div className="loader" key={0}>Loading ...</div>}
+>
+    {items} // <-- This is the content you want to load
+</InfiniteScroll> */}
         </div>
       </div>
     </div>

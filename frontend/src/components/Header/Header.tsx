@@ -8,14 +8,7 @@ const Header = () => {
   const { t } = useTranslation();
   return (
     <nav className="navbar navbar-expand-md navbar-dark sticky-top bg-black2 justify-content-between">
-      <a className="navbar-brand " href="#">
-        {/* <img
-          src="./public/profile.png"
-          width="30"
-          height="30"
-          className="d-inline-block align-top"
-          alt=""
-        /> */}
+      <a className="navbar-brand " href="/">
         <div className="d-inline-flex mb-0 flex-column">
           <h2 className="d-inline-flex mb-0">FAFA</h2>
           <span className="d-inline-flex mb-0">facts & fakes</span>
