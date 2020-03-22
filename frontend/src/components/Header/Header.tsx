@@ -56,11 +56,7 @@ const Header = () => {
         >
           {t("queue")}
         </NavLink>
-        <NavLink
-          className="nav-link capitalized"
-          to="/not-existing"
-          activeClassName="active"
-        >
+        <NavLink className="nav-link capitalized" to="/add" activeClassName="active">
           {t("add")}
         </NavLink>
       </ul>
