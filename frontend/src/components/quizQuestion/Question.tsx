@@ -68,11 +68,15 @@ const QuizQuestion: React.FC<{
           })}
         </div>
         <div className="col-12 mt-3 px-3">
-          <a className="text-white quote-icon text-center" href={`/question/${pk}`}>
+          <a
+            className="text-white quote-icon text-center"
+            href={answers ? `/question/${pk}` : `javascript:;`}
+            title={answers ? `` : `Do tej sekcji można przejść po oddaniu głosu`}
+          >
             <h3 className="mx-4">{title}</h3>
           </a>
         </div>
-        <div className="container pictures pb-2">
+        {/* <div className="container pictures pb-2">
           <div className="row">
             <div className="col-8 vh-50 d-flex mx-auto">
               <img
@@ -87,7 +91,8 @@ const QuizQuestion: React.FC<{
               {"30.03.2020"}
             </div>
           </div>
-        </div>
+        </div> */}
+        {/*bring them back when we have valid pictures*/}
       </div>
       <div className="container mb-2">
         <div className="row d-flex justify-content-around">
@@ -141,7 +146,11 @@ const QuizQuestion: React.FC<{
           >
             Jak głosowali inni:
           </p>
-          <div className={`col-12 ${answers !== null ? "d-flex" : "d-none"}`}>
+          <div
+            className={`col-12 ${
+              answers !== null ? "d-flex justify-content-around" : "d-none"
+            }`}
+          >
             <p className="my-0 text-muted">
               Głosujących PRAWDA: {yes_answers + "/" + numberOfAllVotes}
             </p>
