@@ -3,10 +3,9 @@ import { useParams } from "react-router-dom";
 import * as Reqests from "../../requests/AxiosRequest";
 import Answer from "../Answer/Answer";
 import { Question } from "../../components";
-import Cookies from "js-cookie";
 
 const ExpandedQuestion: React.FC = () => {
-  const { page, id } = useParams();
+  const { id } = useParams();
   const initialQuestion = {
     pk: 0,
     title: "",
@@ -25,7 +24,6 @@ const ExpandedQuestion: React.FC = () => {
 
   const [question, setQuestion] = useState<Reqests.QuestionProps>(initialQuestion);
   const [hasUserVoted, setHasUserVoted] = useState<boolean>(false);
-  const cookieSessionID = Cookies.get("sessionId");
 
   useEffect(() => {
     async function getQuestion() {

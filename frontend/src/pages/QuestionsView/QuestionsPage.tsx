@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getQuestions, QuestionProps } from "../../requests/AxiosRequest";
-import { Question, Answer } from "../../components";
+import { Question } from "../../components";
 import Cookies from "js-cookie";
-import InfiniteScroll from "react-infinite-scroller";
 
 const QuestionsPage: React.FC = () => {
   const { page } = useParams();
@@ -41,15 +40,6 @@ const QuestionsPage: React.FC = () => {
 
   return (
     <div className="col-12 col-md-6 mx-auto">
-      {/* <InfiniteScroll
-        pageStart={0}
-        loadMore={getQuestions(`/?page=${page}&sessionID=${cookieSessionID}`);
-    hasMore={true || false}
-    loader={<div className="loader" key={0}>Loading ...</div>}
->
-    {items} // <-- This is the content you want to load
-</InfiniteScroll> */}
-
       {questions.map((question, index) => {
         return <Question className="my-5" key={index} question={question} />;
       })}

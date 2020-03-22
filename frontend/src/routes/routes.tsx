@@ -5,11 +5,8 @@ import { Header, ExpandedQuestion } from "../components";
 import App from "../pages/App/App";
 import { QuestionsPage, About, NotFound } from "../pages";
 import CookieHoC from "./cookieHoC";
-import Cookies from "js-cookie";
 
 export const Routes: React.FC = () => {
-  const cookieSessionID = Cookies.get("sessionId");
-
   return (
     <BrowserRouter>
       <Header />

@@ -1,26 +1,18 @@
 import React from "react";
 
-const NotFound: React.FC = () => {
+const About: React.FC = () => {
   return (
-    <div className="text-white text-center">
-      <p>
-        Zweryfikuj plotkę, wysyłając ją do naszych ekspertów przez zakładkę 'dodaj'.
-      </p>
-      <p>
-        Sprawdź swoją wiedzę, odpowiadając na pytania wysłane przez innych
-        odwiedzających oraz zweryfikowanych przez ekspertów. Znajdziesz to w zakładce
-        'Quiz'.
-      </p>
-      <p>
-        Podziel się poznanymi faktami, rozsyłając zweryfikowane, pomagające innym
-        plotki. Możesz to zrobić po wykonanym quizie.
-      </p>
-      <p>
-        Jeśli zauważysz coś, na co powinniśmy zwrócić uwagę, to odezwij się do nas
-        wysyłając wiadomość na adres ...@...
-      </p>
+    <div className="text-center">
+      <h2 className="text-white">404!</h2>
+      <h3 className="text-muted">
+        Something went wrong and we're working on it!
+        <img
+          className="img-fluid"
+          src={process.env.PUBLIC_URL + "/icons/wrench_icon.png"}
+        ></img>
+      </h3>
     </div>
   );
 };
 
-export default NotFound;
+export default About;

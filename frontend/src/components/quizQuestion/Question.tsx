@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { QuestionProps, addAnswer } from "../../requests/AxiosRequest";
 import Cookies from "js-cookie";
@@ -30,7 +30,7 @@ const QuizQuestion: React.FC<{
   const { t } = useTranslation();
   let history = useHistory();
   const cookieSessionID = Cookies.get("sessionId");
-  const [hasUserVoted, setHasUserVoted] = useState<boolean>(false);
+  // const [hasUserVoted, setHasUserVoted] = useState<boolean>(false);
   const numberOfAllVotes = yes_answers + no_answers;
 
   const submitAnswer = async (userChoice: boolean) => {
@@ -44,13 +44,13 @@ const QuizQuestion: React.FC<{
     addAnswer(url, data); // this works very counter-niuitive as if user answered we can't answer again but have no way to know if we did.
   };
 
-  useEffect(() => {
-    if (answers !== null) {
-      setHasUserVoted(true); // check if user of this session id already voted
-    } else {
-      setHasUserVoted(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (answers !== null) {
+  //     setHasUserVoted(true); // check if user of this session id already voted
+  //   } else {
+  //     setHasUserVoted(false);
+  //   }
+  // }, []);
 
   return (
     <div data-questionid={pk} className={"container border rounded " + className}>
@@ -94,7 +94,7 @@ const QuizQuestion: React.FC<{
         <div className="row d-flex justify-content-around">
           <div
             className={`col-6 ${
-              hasUserVoted ? "d-none" : "d-flex"
+              answers !== null ? "d-none" : "d-flex"
             } justify-content-center`}
           >
             <button
@@ -116,7 +116,7 @@ const QuizQuestion: React.FC<{
           </div>
           <div
             className={`col-6 ${
-              hasUserVoted ? "d-none" : "d-flex"
+              answers !== null ? "d-none" : "d-flex"
             } justify-content-center`}
           >
             <button
@@ -137,12 +137,12 @@ const QuizQuestion: React.FC<{
           </div>
           <p
             className={`my-1 text-muted text-center ${
-              hasUserVoted ? "d-flex" : "d-none"
+              answers !== null ? "d-flex" : "d-none"
             }`}
           >
             Jak głosowali inni:
           </p>
-          <div className={`col-12 ${hasUserVoted ? "d-flex" : "d-none"}`}>
+          <div className={`col-12 ${answers !== null ? "d-flex" : "d-none"}`}>
             <p className="my-0 text-muted">
               Głosujących PRAWDA: {yes_answers + "/" + numberOfAllVotes}
             </p>
@@ -156,6 +156,7 @@ const QuizQuestion: React.FC<{
             <div className="col-5">
               <img
                 className="img-fluid m-2 border rounded"
+                alt="expert picture profile"
                 src={
                   process.env.REACT_APP_API_BASE + experts[0]?.file ||
                   "https://picsum.photos/100"
@@ -176,7 +177,7 @@ const QuizQuestion: React.FC<{
               </div>
             </div>
             <div className="col-2 justify-content-center align-items-start pt-3 d-flex">
-              <img src={process.env.PUBLIC_URL + "/icons/clock.svg"} />
+              <img src={process.env.PUBLIC_URL + "/icons/clock.svg"} alt="clock" />
             </div>
           </div>
           <div className={`row mt-2 ${expanded ? "d-flex flex-row" : "d-none"}`}>

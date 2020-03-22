@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import InfiniteScroll from "react-infinite-scroller";
 
 const App: React.FC = () => {
   const { t } = useTranslation();
@@ -16,6 +17,14 @@ const App: React.FC = () => {
               {t("Sprawdzaj swoją wiedzę i bądź na bieżąco")}
             </span>
           </div>
+          {/* <InfiniteScroll
+        pageStart={0}
+        loadMore={getQuestions(`/?page=${page}&sessionID=${cookieSessionID}`);
+    hasMore={true || false}
+    loader={<div className="loader" key={0}>Loading ...</div>}
+>
+    {items} // <-- This is the content you want to load
+</InfiniteScroll> */}
         </div>
       </div>
     </div>
