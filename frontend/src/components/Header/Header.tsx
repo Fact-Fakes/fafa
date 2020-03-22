@@ -54,7 +54,7 @@ const Header = () => {
           to="/questions/1"
           activeClassName="active"
         >
-          {t("queue")}
+          {t("review")}
         </NavLink>
         <NavLink className="nav-link capitalized" to="/add" activeClassName="active">
           {t("add")}

@@ -51,6 +51,15 @@ const QuizQuestion: React.FC<{
   //   }
   // }, []);
 
+  const getCorrectURL = () => {
+    const correctExpertPicUrl = experts[0]?.file.substr(1);
+
+    return (
+      process.env.REACT_APP_API_BASE + correctExpertPicUrl ||
+      "https://picsum.photos/100"
+    );
+  };
+
   return (
     <div data-questionid={pk} className={"container border rounded " + className}>
       <div className="row">
@@ -165,10 +174,7 @@ const QuizQuestion: React.FC<{
               <img
                 className="img-fluid m-2 border rounded"
                 alt="expert picture profile"
-                src={
-                  process.env.REACT_APP_API_BASE + experts[0]?.file ||
-                  "https://picsum.photos/100"
-                }
+                src={getCorrectURL()}
               />
             </div>
             <div className="col-5 pl-0">
