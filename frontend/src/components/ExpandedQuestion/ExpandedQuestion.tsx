@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import * as Reqests from "../../requests/AxiosRequest";
 import Answer from "../Answer/Answer";
 import { Question } from "../../components";
+import Cookies from "js-cookie";
 
 const ExpandedQuestion: React.FC = () => {
   const { id } = useParams();
@@ -21,17 +22,18 @@ const ExpandedQuestion: React.FC = () => {
     attachments: [],
     experts: []
   };
+  const cookieSessionID = Cookies.get("sessionId");
 
   const [question, setQuestion] = useState<Reqests.QuestionProps>(initialQuestion);
-  const [hasUserVoted, setHasUserVoted] = useState<boolean>(false);
 
   useEffect(() => {
     async function getQuestion() {
-      const fetchedQuestions = await Reqests.getQuestion(`/questions/${id}`);
+      const fetchedQuestions = await Reqests.getQuestion(
+        `/questions/${id}/?sessionID=${cookieSessionID}`
+      );
       setQuestion(fetchedQuestions);
     }
     getQuestion();
-    setHasUserVoted(question.answers === true || question.answers === false); // check if user of this session id already voted
   }, []);
 
   useEffect(() => {}, []);
@@ -41,7 +43,7 @@ const ExpandedQuestion: React.FC = () => {
       <div className="mb-4">
         <Answer userAnswer={question.answers} correctAnswer={question.is_true} />
       </div>
-      <Question expanded={hasUserVoted} question={question} />
+      <Question expanded={question.answers !== null} question={question} />
     </div>
   );
 };
