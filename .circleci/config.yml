@@ -10,7 +10,7 @@ jobs:
       - run: sudo chown -R circleci:circleci /usr/local/bin
       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.8/site-packages
       - restore_cache:
-        key: deps10-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          key: deps10-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run:
           command: |
             sudo pip install pipenv
@@ -21,11 +21,11 @@ jobs:
             pipenv run python manage.py makemigrations
             pipenv run python manage.py migrate
       - save_cache:
-        key: deps10-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-        paths:
-          - '.venv'
-          - '/usr/local/bin'
-          - '/usr/local/lib/python3.8/site-packages'
+          key: deps10-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          paths:
+            - '.venv'
+            - '/usr/local/bin'
+            - '/usr/local/lib/python3.8/site-packages'
       - run:
           command: |
             ls -a
