@@ -21,7 +21,7 @@ jobs:
       - run:
           command: |
             ls -a
-            pipenv run coverage run --source='.' manage.py test
+            pipenv run coverage run --source='.' --rcfile=.coveragerc manage.py test
       - run:
           command: |
             pipenv run coverage report -m
