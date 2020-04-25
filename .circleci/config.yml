@@ -1,18 +1,14 @@
 version: 2.1
 
-orbs:
-  python: circleci/python@0.2.1
-
 jobs:
   test:
     docker:
       - image: circleci/python:3.8
-    executor: python/default
     steps:
       - checkout
       - run:
           command: |
-            python3.8 -m pip install pipenv
+            sudo pip install pipenv
             pipenv install
             pipenv install coverage
             pipenv run python manage.py makemigrations
