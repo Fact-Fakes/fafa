@@ -1,27 +1,39 @@
 version: 2.1
-
 jobs:
-  test:
+  build:
+    working_directory: ~/circleci-demo-python-django
     docker:
       - image: circleci/python:3.8
+        environment:
+          PIPENV_VENV_IN_PROJECT: true
     steps:
       - checkout
+      - run: sudo chown -R circleci:circleci /usr/local/bin
+      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.6/site-packages
+      - restore_cache:
+          key: deps10-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run:
           command: |
             sudo pip install pipenv
             pipenv install
             pipenv install coverage
+      - save_cache:
+          key: deps10-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          paths:
+            - '.venv'
+            - '/usr/local/bin'
+            - '/usr/local/lib/python3.6/site-packages'
+      - run:
+          command: |
             pipenv run python manage.py makemigrations
             pipenv run python manage.py migrate
             pipenv run coverage run --source='.' manage.py test
             pipenv run coverage report -m
             pipenv run coverage html
       - store_test_results:
-        path: htmlcov
+          path: test-results
       - store_artifacts:
-        path: htmlcov
-
-workflows:
-  main:
-    jobs:
-      - test
+          path: test-results
+          destination: tr1
+      - store_artifacts:
+          path: htmlcov
