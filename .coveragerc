@@ -8,3 +8,8 @@ omit =
         manage.py
         *apps.py
         *urls.py
+        /.venv/*
+        .venv
+        .venv/
+        .venv/*
+        *.venv*

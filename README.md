@@ -1,5 +1,7 @@
-[![Pipeline](https://gitlab.com/daniel.rozycki/fakebuster/badges/master/pipeline.svg)](https://gitlab.com/daniel.rozycki/fakebuster) 
-[![Coverage](https://gitlab.com/daniel.rozycki/fakebuster/badges/master/coverage.svg)](https://gitlab.com/daniel.rozycki/fakebuster)
+[![Pipeline](https://circleci.com/gh/AlTosterino/fafa.svg?style=svg&circle-token=332391ed813d822c77ef1801908774689db89b25)](https://app.circleci.com/pipelines/github/AlTosterino/fafa)
+[![Codecov](https://codecov.io/gh/AlTosterino/fafa/branch/master/graph/badge.svg?token=aJNPKNp0Fn)](https://codecov.io/gh/AlTosterino/fafa)
+
+
 
 
 # FAFA

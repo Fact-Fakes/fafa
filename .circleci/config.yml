@@ -1,0 +1,47 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.8
+        environment:
+          PIPENV_VENV_IN_PROJECT: true
+    steps:
+      - checkout
+      - run: sudo chown -R circleci:circleci /usr/local/bin
+      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.8/site-packages
+      - restore_cache:
+          key: deps10-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+      - run:
+          command: |
+            sudo pip install pipenv
+            pipenv install
+            pipenv install coverage
+            pipenv install codecov
+      - run:
+          command: |
+            pipenv run python manage.py makemigrations
+            pipenv run python manage.py migrate
+      - save_cache:
+          key: deps10-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          paths:
+            - '.venv'
+            - '/usr/local/bin'
+            - '/usr/local/lib/python3.8/site-packages'
+      - run:
+          command: |
+            ls -a
+            pipenv run coverage run --source='.' --rcfile=.coveragerc manage.py test
+      - run:
+          command: |
+            pipenv run coverage report -m
+            pipenv run coverage html
+      - run:
+          command: |
+            pipenv run codecov
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results
+          destination: tr1
+      - store_artifacts:
+          path: htmlcov
