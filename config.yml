@@ -1,0 +1,31 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@0.2.1
+
+jobs:
+  test:
+    docker:
+      - image: circleci/python:3.8
+    executor: python/default
+    steps:
+      - checkout
+      - run:
+          command: |
+            python3.8 -m pip install pipenv
+            pipenv install
+            pipenv install coverage
+            pipenv run python manage.py makemigrations
+            pipenv run python manage.py migrate
+            pipenv run coverage run --source='.' manage.py test
+            pipenv run coverage report -m
+            pipenv run coverage html
+      - store_test_results:
+        path: htmlcov
+      - store_artifacts:
+        path: htmlcov
+
+workflows:
+  main:
+    jobs:
+      - test
