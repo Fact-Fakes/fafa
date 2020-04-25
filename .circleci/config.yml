@@ -34,6 +34,9 @@ jobs:
           command: |
             pipenv run coverage report -m
             pipenv run coverage html
+      - run:
+          command: |
+            bash <(curl -s https://codecov.io/bash)
       - store_test_results:
           path: test-results
       - store_artifacts:
