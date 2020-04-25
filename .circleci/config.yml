@@ -16,6 +16,7 @@ jobs:
             sudo pip install pipenv
             pipenv install
             pipenv install coverage
+            pipenv install codecov
       - run:
           command: |
             pipenv run python manage.py makemigrations
@@ -36,7 +37,7 @@ jobs:
             pipenv run coverage html
       - run:
           command: |
-            bash <(curl -s https://codecov.io/bash)
+            codecov
       - store_test_results:
           path: test-results
       - store_artifacts:
