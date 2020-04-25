@@ -27,7 +27,11 @@ jobs:
           command: |
             pipenv run python manage.py makemigrations
             pipenv run python manage.py migrate
+      - run:
+          command: |
             pipenv run coverage run --source='.' manage.py test
+      - run:
+          command: |
             pipenv run coverage report -m
             pipenv run coverage html
       - store_test_results:
