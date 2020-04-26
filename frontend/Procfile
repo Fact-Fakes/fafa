@@ -1,0 +1,2 @@
+release: cd frontend && yarn build
+web: cd frontend && yarn start
