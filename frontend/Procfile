@@ -1,2 +1,1 @@
-release: cd frontend && yarn build
-web: cd frontend && yarn start
+web: cd frontend && npm start
