@@ -1,4 +1,6 @@
-"scripts": {
-    "postinstall": "cd frontend && yarn build",
-    "start": "cd backend && yarn start"
+{
+    "scripts": {
+        "postinstall": "cd frontend && yarn build",
+        "start": "cd backend && yarn start"
+    }
 }
