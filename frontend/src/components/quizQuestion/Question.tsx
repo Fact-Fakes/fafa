@@ -84,7 +84,7 @@ const QuizQuestion: React.FC<{
           <div className="col-12 mt-3 px-3">
             <a
               className="text-white quote-icon text-center"
-              href={answers ? `/question/${pk}` : `javascript:;`}
+              href={answers ? `/question/${pk}` : `#`}
               title={answers ? `` : `Do tej sekcji można przejść po oddaniu głosu`}
             >
               <h3 className="mx-4">{title}</h3>
