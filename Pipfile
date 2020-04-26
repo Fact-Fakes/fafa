@@ -18,6 +18,7 @@ psycopg2-binary = "*"
 gunicorn = "*"
 whitenoise = "*"
 django-storages = "*"
+dropbox = "*"
 
 [requires]
 python_version = "3.8"
