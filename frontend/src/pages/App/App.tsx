@@ -65,7 +65,7 @@ const App: React.FC = () => {
             }
           >
             {questions.map((question, index) => {
-              return <Question key={index} question={question} />;
+              return <Question key={index} question={question} className="my-5" />;
             })}
           </InfiniteScroll>
         </div>
