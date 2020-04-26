@@ -54,7 +54,7 @@ const QuizQuestion: React.FC<{
     const getCorrectURL = () => {
       const correctExpertPicUrl = experts[0]?.file.substr(1);
       let picUrl = ""
-      if (correctExpertPicUrl.includes("https://")) {
+      if (correctExpertPicUrl.includes("ttps://")) {
         picUrl = correctExpertPicUrl;
       } else {
         picUrl = process.env.REACT_APP_API_BASE + correctExpertPicUrl ||
