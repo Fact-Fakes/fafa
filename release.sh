@@ -1,3 +1,4 @@
+sudo apt install libpq-dev
 pip install pipenv
 pipenv install
 pipenv install psycopg2
