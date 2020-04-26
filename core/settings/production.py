@@ -5,6 +5,7 @@ GET VARIABLES FROM ENVIRON
 os.environ.get('variable')
 """
 from core.settings.core import *
+import dj_database_url
 import os
 
 
@@ -17,7 +18,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG")
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1", "fafaapi.herokuapp.com"]
 
 
 # Database
@@ -33,5 +34,20 @@ DATABASES = {
         "PORT": os.environ.get("DATABASE_PORT"),
     }
 }
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+DROPBOX_OAUTH2_TOKEN = os.environ.get("DROPBOX_TOKEN")
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+    "DEFAULT_RENDERER_CLASSES": (
+        "rest_framework.renderers.JSONRenderer",
+    )
+}
+
 
 CORS_ORIGIN_ALLOW_ALL = True
