@@ -13,6 +13,7 @@ mock = "*"
 openpyxl = "*"
 django-cors-headers = "*"
 coverage = "*"
+dj-database-url = "*"
 
 [requires]
 python_version = "3.8"
