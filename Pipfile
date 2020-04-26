@@ -14,6 +14,7 @@ openpyxl = "*"
 django-cors-headers = "*"
 coverage = "*"
 dj-database-url = "*"
+psycopg2-binary = "*"
 
 [requires]
 python_version = "3.8"
