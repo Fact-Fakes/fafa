@@ -55,7 +55,7 @@ const QuizQuestion: React.FC<{
       const correctExpertPicUrl = experts[0]?.file.substr(1);
       let picUrl = ""
       if (correctExpertPicUrl.includes("ttps://")) {
-        picUrl = correctExpertPicUrl;
+        picUrl = `h${correctExpertPicUrl}`;
       } else {
         picUrl = process.env.REACT_APP_API_BASE + correctExpertPicUrl ||
           "https://picsum.photos/100";
