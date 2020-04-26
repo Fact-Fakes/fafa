@@ -55,7 +55,7 @@ const App: React.FC = () => {
           </div>
           <InfiniteScroll
             pageStart={1}
-            loadMore={async page => await getQuestionsWrapper(page)}
+            loadMore={async (page) => await getQuestionsWrapper(page)}
             hasMore={!hasMore}
             initialLoad={true}
             loader={
@@ -64,9 +64,13 @@ const App: React.FC = () => {
               </div>
             }
           >
-            {questions.map((question, index) => {
-              return <Question key={index} question={question} className="my-5" />;
-            })}
+            <div className="col-12 col-md-6 mx-auto">
+              {questions.map((question, index) => {
+                return (
+                  <Question key={index} question={question} className="my-5" />
+                );
+              })}
+            </div>
           </InfiniteScroll>
         </div>
       </div>
