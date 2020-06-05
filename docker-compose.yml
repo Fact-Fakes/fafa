@@ -4,14 +4,14 @@ services:
 
   frontend-web:
     image: altosterino/fafa-backend
-    command: pipenv run gunicorn core.wsgi:application --bind 0.0.0.0:8080 --workers=5 --threads=2
+    command: pipenv run gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers=5
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:
       - frontend-db
     volumes:
-      - /home/mediafiles:/api/core/media
-      - /home/staticfiles:/api/core/static
+      - /home/fafa/mediafiles:/api/core/media
+      - /home/fafa/staticfiles:/api/core/static
     environment:
       - SECRET_KEY=verysecret
       - DEBUG=0
