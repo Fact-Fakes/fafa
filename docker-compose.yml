@@ -4,9 +4,9 @@ services:
 
   frontend-web:
     image: altosterino/fafa-backend
-    command: pipenv run gunicorn core.wsgi:application --bind 0.0.0.0:8000
+    command: pipenv run gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers=4
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     depends_on:
       - frontend-db
     volumes:
@@ -34,11 +34,11 @@ services:
     image: altosterino/fafa-frontend
     command: yarn start
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     depends_on:
       - frontend-web
     environment:
-      - REACT_APP_API_BASE=http://127.0.0.1:8000/
+      - REACT_APP_API_BASE=https://fafaapi.altosterino.com/
 
 volumes:
   postgres_data:
