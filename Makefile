@@ -1,6 +1,7 @@
+
 TAG = $(shell git describe --tags --always)
-PREFIX = fakebuster
-REPO_NAME = $(shell git config --get remote.origin.url | tr ':.' '/'  | rev | cut -d '/' -f 2 | rev)
+PREFIX = altosterino
+REPO_NAME = fafa
 
 all: images
 images: image-backend image-frontend

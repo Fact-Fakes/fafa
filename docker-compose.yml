@@ -3,7 +3,7 @@ version: "3.2"
 services:
 
   frontend-web:
-    image: fakebuster/fakebuster-backend
+    image: altosterino/fafa-backend
     command: pipenv run gunicorn core.wsgi:application --bind 0.0.0.0:8000
     ports:
       - "8000:8000"
@@ -31,7 +31,7 @@ services:
       - POSTGRES_DB=django_test
 
   frontend:
-    image: fakebuster/fakebuster-frontend
+    image: altosterino/fafa-frontend
     command: yarn start
     ports:
       - "3000:3000"

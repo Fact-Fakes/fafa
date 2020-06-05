@@ -21,7 +21,14 @@ class QuestionsViewsSet(viewsets.ModelViewSet):
 
     """
 
-    queryset = Question.objects.all()
+    queryset = (
+        Question.objects.all()
+        .prefetch_related("experts")
+        .prefetch_related("keywords")
+        .prefetch_related("attachment_set")
+        .prefetch_related("vote_set")
+        .prefetch_related("answer_set")
+    )
     serializer_class = AllQuestionsSerializer
     http_method_names = ("get",)
 

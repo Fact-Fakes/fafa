@@ -46,7 +46,7 @@ class AllQuestionsSerializer(serializers.ModelSerializer):
     def get_answers(self, obj):
         """ Method for quering answers based on sessionID """
         if sessionID := self.context.get("sessionID"):
-            answers = Answer.objects.filter(question=obj, sessionID=sessionID).first()
+            answers = obj.answer_set.filter(sessionID=sessionID).first()
             try:
                 return answers.users_answer
             except AttributeError:
@@ -56,7 +56,7 @@ class AllQuestionsSerializer(serializers.ModelSerializer):
     def get_votes(self, obj):
         """ Method for quering votes based on sessionID """
         if sessionID := self.context.get("sessionID"):
-            votes = Vote.objects.filter(question=obj, sessionID=sessionID).first()
+            votes = obj.vote_set.filter(sessionID=sessionID).first()
             try:
                 return votes.updown
             except AttributeError:
@@ -65,18 +65,18 @@ class AllQuestionsSerializer(serializers.ModelSerializer):
 
     def get_attachments(self, obj):
         """ Method for attachments  based on question """
-        attachments = Attachment.objects.filter(question=obj)
+        attachments = obj.attachment_set.all()
         serializer = AttachmentSerializer(attachments, many=True)
         return serializer.data
 
     def get_keywords(self, obj):
         """ Method for quering keywords based on question """
-        keywords = Keyword.objects.filter(questions=obj).values_list("name", flat=True)
+        keywords = obj.keywords.all().values_list("name", flat=True)
         return keywords
 
     def get_experts(self, obj):
         """ Method for getting experts based on question """
-        experts = Expert.objects.filter(questions=obj)
+        experts = obj.experts.all()
         serializer = ExpertSerializer(experts, many=True)
         return serializer.data
 
